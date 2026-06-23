@@ -68,16 +68,15 @@ a:hover {
   place-items: center;
   padding: 24px;
   background:
-    linear-gradient(135deg, rgba(11, 61, 145, 0.92), rgba(56, 189, 248, 0.62)),
-    url("assets/images/ny_itinerary_banner_2026.png") center / cover no-repeat;
+    linear-gradient(180deg, #ffffff 0%, #f5f8fc 48%, #eaf6ff 100%);
 }
 
 .login-panel {
   width: min(100%, 430px);
   padding: 26px;
-  border: 1px solid rgba(255, 255, 255, 0.62);
+  border: 1px solid var(--line);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.94);
+  background: rgba(255, 255, 255, 0.96);
   box-shadow: var(--shadow);
 }
 

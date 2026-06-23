@@ -1,4 +1,4 @@
-# 2026 NY Itinerary 附件整理 v3.17
+# 2026 NY Itinerary 附件整理 v3.18
 
 ## 本次整理範圍
 
@@ -70,6 +70,7 @@
 - First edition checklist：新增 `notes/first_edition_checklist.md`，整理第一版資料完整度、優先待補項目與每日行程缺口。
 - Mobile calendar continuity：移除行程列的週分組容器，讓 Day 1-23 在手機上成為真正連續的一排，避免週交界出現大空白。
 - Row calendar card simplification：行程列 Day card 簡化為 `Day XX` 與日期兩行，手機寬度一屏顯示 3 張完整卡片，選取卡片置中，左右留白與內容區一致。
+- Login background cleanup：登入頁背景改為一般淺色背景，不再使用 NY banner；NY banner 保留在旅程主頁 hero。
 
 ## 行程重點整理
 
