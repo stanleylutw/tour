@@ -337,13 +337,8 @@ function weekStripTemplate(days, activeDayId) {
 function dayJumpTemplate(day, active) {
   return `
     <button class="day-jump ${active ? "active" : ""}" type="button" data-jump-day="${day.id}" aria-label="跳到 Day ${day.day}">
-      <span class="day-jump-top">
-        <span class="day-jump-number">Day ${day.day}</span>
-        <span class="day-jump-icon"><img src="${iconMap[day.icon] || iconMap["map-pin"]}" alt=""></span>
-      </span>
+      <span class="day-jump-number">Day ${day.day}</span>
       <span class="day-jump-date">${shortDateWithWeekday(day)}</span>
-      <span class="day-jump-city">${escapeHtml(compactCity(day.city))}</span>
-      <span class="day-jump-status ${statusClass(day.status)}" aria-hidden="true"></span>
     </button>
   `;
 }
