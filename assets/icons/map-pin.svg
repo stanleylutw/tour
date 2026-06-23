@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">地點標記</title>
+  <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M32 57s19-18 19-34a19 19 0 1 0-38 0c0 16 19 34 19 34Z" fill="#38BDF8" stroke="#0B3D91"/>
+    <circle cx="32" cy="23" r="7" fill="#fff" stroke="#0B3D91"/>
+    <path d="M26 44h12" stroke="#D62828"/>
+    <path d="M29 50h6" stroke="#FBBF24"/>
+  </g>
+</svg>

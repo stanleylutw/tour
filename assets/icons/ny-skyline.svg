@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">紐約天際線</title>
+  <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 54h52"/>
+    <path d="M10 54V32h10v22"/>
+    <path d="M24 54V22h9v32"/>
+    <path d="M27 22l1.5-7 1.5 7"/>
+    <path d="M37 54V28h7v26"/>
+    <path d="M48 54V36h8v18"/>
+    <path d="M13 38h4M13 44h4M27 30h3M27 37h3M27 44h3M40 35h1M40 42h1M51 42h2M51 48h2"/>
+    <path d="M8 24h8" stroke="#38BDF8"/>
+    <path d="M44 20h10" stroke="#D62828"/>
+    <path d="M49 15l2-4 2 4" stroke="#FBBF24"/>
+  </g>
+</svg>

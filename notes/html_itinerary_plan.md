@@ -1,0 +1,342 @@
+# Family Trip Portal HTML 規劃 v1.0
+
+## 專案定位
+
+本專案不是單一的 NY itinerary 頁面，而是 **Family Trip Portal 家庭旅行入口網站**。
+
+2026 NY itinerary 是第一個旅程，未來可繼續加入日本、歐洲、郵輪、迪士尼等其他行程。首頁會自動判斷目前日期，直接進入最接近或正在進行中的旅程；使用者也可以回到主選單查看所有旅程。
+
+## 第一版目標
+
+第一版先做本機靜態 HTML prototype，不接後端，不接 Google Drive。
+
+第一版需要完成：
+
+- Family Trip Portal 主入口。
+- 自動切換最近 / 進行中的 itinerary。
+- 可回到所有旅程主選單。
+- 2026 NY trip 詳細頁。
+- Day 1-23 每日行程卡片。
+- 每日照片上傳與心得。
+- 本機儲存照片與文字紀錄。
+- HTML travel record book 旅行紀錄書模式。
+- 交通、住宿、票券、郵輪、活動摘要。
+- 待確認事項清單。
+- 隱藏敏感資訊。
+
+## 建議檔案架構
+
+```text
+index.html
+styles.css
+script.js
+data/
+  trips.json
+  trips/
+    2026-ny.json
+assets/
+  icons/
+  trips/
+    2026-ny/
+      banner.png
+      family-logo.png
+      attachments/
+      photos/
+```
+
+目前已有素材可先保留在：
+
+```text
+assets/images/ny_itinerary_banner_2026.png
+assets/images/family_logo_2026.png
+assets/icons/
+attachments/
+```
+
+實作第一版時，可先直接使用現有路徑；若要進一步整理，再搬到 `assets/trips/2026-ny/`。
+
+## 多旅程資料設計
+
+首頁不應把 NY itinerary 寫死在 HTML。NY 應該是第一筆 trip data。
+
+`data/trips.json` 建議格式：
+
+```json
+[
+  {
+    "id": "2026-ny",
+    "title": "2026 暑假 我們在紐約！",
+    "destination": "New York City",
+    "startDate": "2026-07-07",
+    "endDate": "2026-07-29",
+    "status": "planned",
+    "banner": "assets/images/ny_itinerary_banner_2026.png",
+    "logo": "assets/images/family_logo_2026.png",
+    "data": "data/trips/2026-ny.json"
+  }
+]
+```
+
+每個 trip 的詳細資料放在獨立 JSON，例如 `data/trips/2026-ny.json`。
+
+## 自動切換最近旅程
+
+`index.html` 開啟後流程：
+
+```text
+讀取 trips.json
+  ↓
+依照今天日期判斷旅程狀態
+  ↓
+如果今天在某個 trip 日期內，直接進入該 trip
+  ↓
+如果沒有進行中的 trip，進入最近即將開始的 trip
+  ↓
+如果沒有未來 trip，進入最近結束的 trip
+  ↓
+使用者可按「所有旅程」回主選單
+```
+
+排序規則：
+
+1. 進行中的 trip 優先。
+2. 即將開始且距離今天最近的 trip 次之。
+3. 已結束但結束日期距離今天最近的 trip 最後。
+
+需要提供 override：
+
+- `所有旅程`：回主選單。
+- `目前旅程`：回到自動判斷的最近旅程。
+- `固定此旅程`：讓使用者暫時固定目前旅程。
+- `取消固定`：回到自動判斷邏輯。
+
+## UI 與風格
+
+整體風格：**家庭旅行相簿 + 行程手冊 + 輕量控制台**。
+
+設計方向：
+
+- 手機優先。
+- 繁體中文為主。
+- 航班、飯店、地址、訂單名稱保留英文。
+- 使用明亮、歡樂、紐約旅行感。
+- 不做商務 dashboard。
+- 不做過度花俏的裝飾，資訊查找要快。
+
+主色建議：
+
+- Navy：`#0B3D91`
+- Red：`#D62828`
+- Yellow：`#FBBF24`
+- Sky：`#38BDF8`
+- White：`#FFFFFF`
+
+首頁主視覺：
+
+- 使用 `assets/images/ny_itinerary_banner_2026.png` 作為 2026 NY trip hero。
+- 使用 `assets/images/family_logo_2026.png` 作為 family logo。
+- 使用 `assets/icons/` 的 SVG icons 作為行程卡片與狀態標籤。
+
+## 頁面模式
+
+系統應有三種主要模式：
+
+1. `旅程中`
+   - 今日行程、地址、交通、票券、導航最重要。
+   - 如果今天落在 trip 日期範圍內，預設進入此模式。
+
+2. `規劃中`
+   - 待確認事項、費用摘要、訂單狀態最重要。
+   - 如果 trip 尚未開始，預設進入此模式。
+
+3. `回憶中`
+   - 照片、每日心得、旅行紀錄書最重要。
+   - 如果 trip 已結束，預設進入此模式。
+
+## 主要 UI 區塊
+
+### 1. Login Screen
+
+第一版使用本機 family passcode，不做真正帳號系統。
+
+功能：
+
+- 輸入 family passcode 後進入。
+- 使用 `localStorage` 記住登入狀態。
+- 提供登出按鈕。
+
+第二版才改成 Google Sign-In。
+
+### 2. Family Trip Portal 主選單
+
+內容：
+
+- Current / Nearest Trip。
+- Upcoming Trips。
+- Past Trips。
+- Future Trip placeholder。
+
+每個 trip card 顯示：
+
+- 旅程名稱。
+- 日期範圍。
+- 目的地。
+- 封面圖。
+- 人數。
+- 狀態：`規劃中`、`旅程中`、`已完成`。
+
+### 3. Trip Detail 旅程詳細頁
+
+以 2026 NY 為第一個 trip。
+
+區塊：
+
+- Hero banner。
+- Trip quick summary。
+- Day 1-23 timeline。
+- 交通與住宿摘要。
+- 票券與訂單摘要。
+- 每日照片與心得。
+- 旅行紀錄書。
+- 待確認事項。
+
+### 4. Daily Itinerary Cards
+
+每一天一張卡片。
+
+每張卡片包含：
+
+- Day 編號。
+- 日期與星期。
+- 城市 / 地點。
+- 交通時間。
+- 住宿。
+- 當日重點。
+- 費用摘要。
+- 狀態標籤。
+- 附件來源連結。
+- 每日照片上傳。
+- 每日心得 / 備註。
+
+### 5. Travel Record Book
+
+旅行紀錄書由每日卡片自動產生。
+
+第一版輸出 HTML Album：
+
+- 每日照片。
+- 每日心得。
+- 當日行程亮點。
+- 重要票券或地點摘要。
+
+暫不做 PDF 匯出，保留第二版功能。
+
+## 本機資料儲存
+
+第一版使用本機儲存：
+
+- `localStorage`：登入狀態、每日心得、勾選狀態、固定旅程。
+- `IndexedDB`：每日上傳照片。
+
+所有 key 必須包含 `tripId`，避免未來多旅程資料混在一起。
+
+範例：
+
+```text
+trip-portal:auth
+trip-portal:pinned-trip-id
+trip-portal:record:2026-ny:day-01
+trip-portal:photos:2026-ny:day-01
+```
+
+儲存介面需可替換，方便第二版接 Google Drive：
+
+```js
+saveDayRecord(tripId, dayId, data)
+loadDayRecord(tripId, dayId)
+saveDayPhoto(tripId, dayId, file)
+loadDayPhotos(tripId, dayId)
+```
+
+## 未來 Google Drive 版本
+
+第二版才接 Google Drive。
+
+方向：
+
+- Google Sign-In。
+- 照片存到 Google Drive。
+- 每日文字紀錄存成 JSON。
+- 每個 trip 建立獨立資料夾。
+
+建議 Drive 結構：
+
+```text
+Family Trip Portal/
+  2026-ny/
+    record-book-data.json
+    photos/
+      day-01/
+      day-02/
+    attachments/
+```
+
+## 隱私與敏感資訊
+
+HTML 頁面預設只顯示摘要，不顯示敏感資訊。
+
+需隱藏：
+
+- 信用卡末四碼。
+- Member ID。
+- 個人證件資訊。
+- 完整付款資訊。
+- 不適合公開分享的訂單細節。
+
+附件連結可放在「私人資料來源」區塊。未來若要分享給朋友，可一鍵隱藏此區塊。
+
+## 第一版不做的功能
+
+為了避免第一版過大，以下功能先不做：
+
+- 真正 Google 登入。
+- 多人即時同步。
+- PDF 匯出。
+- 照片拖拉排序。
+- 照片批次壓縮。
+- 雲端備份。
+- 後端 API。
+
+## 第一版驗收標準
+
+- 開啟 `index.html` 後會自動進入最近 / 進行中的 trip。
+- 可回到所有旅程主選單。
+- 2026 NY trip 可完整顯示 Day 1-23。
+- Banner、family logo、SVG icons 正常顯示。
+- 每日照片可上傳並保存在本機。
+- 每日心得可輸入並保存在本機。
+- 重新整理頁面後，本機資料仍存在。
+- Travel Record Book 可依每日照片與心得自動產生。
+- 待確認事項可清楚顯示。
+- 手機寬度 390px / 430px 無文字重疊。
+- 桌面寬度 1440px 版面清楚。
+- 敏感資訊不出現在公開主畫面。
+
+## 建議實作順序
+
+1. 建立 `data/trips.json` 與 `data/trips/2026-ny.json`。
+2. 建立 `index.html`、`styles.css`、`script.js`。
+3. 實作 local login。
+4. 實作自動選擇最近 trip。
+5. 實作所有旅程主選單。
+6. 實作 2026 NY trip 詳細頁。
+7. 實作每日行程卡片。
+8. 實作本機每日心得儲存。
+9. 實作 IndexedDB 照片上傳。
+10. 實作 Travel Record Book。
+11. 實作待確認事項與私人附件來源區。
+12. 做手機與桌面視覺檢查。
+
+## 備註
+
+第一版的重點是先做出可用、可展示、可記錄旅行的本機版本。資料架構一開始就要支援多旅程與 `tripId`，這樣第二版接 Google Drive 或新增其他 itinerary 時，不需要推倒重來。

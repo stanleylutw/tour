@@ -1,0 +1,16 @@
+[
+  {
+    "id": "2026-ny",
+    "title": "2026 暑假 我們在紐約！",
+    "subtitle": "Taipei, Seoul, New York, Miami, Bahamas",
+    "destination": "New York City",
+    "startDate": "2026-07-07",
+    "endDate": "2026-07-29",
+    "people": 8,
+    "peopleNote": "台灣出發 4 人 + NY 會合 4 人",
+    "status": "planned",
+    "banner": "assets/images/ny_itinerary_banner_2026.png",
+    "logo": "assets/images/family_logo_2026.png",
+    "data": "data/trips/2026-ny.json"
+  }
+]

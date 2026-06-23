@@ -1,0 +1,12 @@
+.DS_Store
+Thumbs.db
+
+# Local temporary files
+tmp/
+*.tmp
+*.log
+
+# Editor / tool caches
+.idea/
+.vscode/
+node_modules/

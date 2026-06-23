@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Family Trip Portal</title>
+    <meta name="description" content="家庭旅行入口網站與旅行紀錄書">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div id="app" class="app-shell">
+      <section id="login-screen" class="login-screen" aria-labelledby="login-title">
+        <div class="login-panel">
+          <img class="login-logo" src="assets/images/family_logo_2026.png" alt="Family logo">
+          <p class="eyebrow">Family Trip Portal</p>
+          <h1 id="login-title">我們的旅行紀錄書</h1>
+          <p class="login-copy">輸入 family passcode 後，就可以查看行程、上傳每日照片、寫下旅行心得。</p>
+          <form id="login-form" class="login-form">
+            <label for="passcode">Family passcode</label>
+            <div class="login-row">
+              <input id="passcode" name="passcode" type="password" inputmode="numeric" autocomplete="current-password" placeholder="請輸入 passcode">
+              <button type="submit">進入</button>
+            </div>
+            <p id="login-error" class="form-error" role="alert"></p>
+          </form>
+        </div>
+      </section>
+
+      <main id="main-app" class="main-app hidden">
+        <header class="topbar">
+          <button id="menu-button" class="icon-button menu-only-button" type="button" aria-label="所有旅程">
+            <span aria-hidden="true">☰</span>
+          </button>
+          <button id="current-trip-button" class="icon-text-button trip-title-button" type="button">
+            <span aria-hidden="true">⌖</span>
+            <span>Family Trip Portal</span>
+          </button>
+          <button id="calendar-mode-button" class="icon-text-button hidden" type="button" aria-label="切換月曆模式">
+            <span aria-hidden="true">▣</span>
+            <span>月曆</span>
+          </button>
+          <button id="logout-button" class="icon-button" type="button" aria-label="登出">⎋</button>
+        </header>
+
+        <section id="portal-view" class="portal-view hidden" aria-labelledby="portal-title">
+          <div class="section-heading">
+            <p class="eyebrow">Family Trip Portal</p>
+            <h1 id="portal-title">所有旅程</h1>
+            <p>未來每一次旅行都會放在這裡。系統會自動幫你打開最接近的行程。</p>
+          </div>
+          <div id="trip-list" class="trip-list"></div>
+        </section>
+
+        <section id="trip-view" class="trip-view hidden">
+          <div id="trip-hero" class="trip-hero"></div>
+          <div id="trip-calendar" class="trip-calendar"></div>
+
+          <nav class="section-tabs" aria-label="Trip sections">
+            <button class="tab-button active" type="button" data-section="overview">總覽</button>
+            <button class="tab-button" type="button" data-section="days">每日行程</button>
+            <button class="tab-button" type="button" data-section="bookings">票券住宿</button>
+            <button class="tab-button" type="button" data-section="record">紀錄書</button>
+            <button class="tab-button" type="button" data-section="pending">待確認</button>
+          </nav>
+
+          <section id="overview" class="content-section"></section>
+          <section id="days" class="content-section"></section>
+          <section id="bookings" class="content-section"></section>
+          <section id="record" class="content-section"></section>
+          <section id="pending" class="content-section"></section>
+        </section>
+      </main>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img">
+  <title>GPS map pin</title>
+  <path d="M5 33h19l8 10-28 18Z" fill="#5CB3D8" />
+  <path d="M32 43l8-10h18l4 28Z" fill="#78BFAE" />
+  <path d="M24 33h16l8 10-16 12-16-12Z" fill="#54A9D0" />
+  <path d="M4 61l28-22 28 22Z" fill="#58ADD5" />
+  <path d="M32 2c8.7 0 15.8 7.1 15.8 15.8 0 10.8-15.8 27.7-15.8 27.7S16.2 28.6 16.2 17.8C16.2 9.1 23.3 2 32 2Z" fill="#EF5B84" />
+  <circle cx="32" cy="17.8" r="6.3" fill="#FFFFFF" />
+</svg>

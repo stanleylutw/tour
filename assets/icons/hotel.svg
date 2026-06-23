@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">飯店</title>
+  <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 56V16a4 4 0 0 1 4-4h24a4 4 0 0 1 4 4v40"/>
+    <path d="M44 30h8a4 4 0 0 1 4 4v22"/>
+    <path d="M8 56h50"/>
+    <path d="M21 56V42h14v14" fill="#38BDF8" stroke="#0B3D91"/>
+    <path d="M20 21h5M31 21h5M20 30h5M31 30h5"/>
+    <path d="M50 39h2M50 47h2"/>
+    <path d="M26 8h4"/>
+    <path d="M28 6v8" stroke="#D62828"/>
+    <path d="M26 10h4" stroke="#D62828"/>
+  </g>
+</svg>

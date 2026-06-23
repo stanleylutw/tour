@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">地鐵</title>
+  <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="13" y="9" width="38" height="42" rx="8"/>
+    <path d="M20 17h24"/>
+    <path d="M19 25h26v12H19z" fill="#38BDF8" stroke="#0B3D91"/>
+    <circle cx="23" cy="43" r="3" fill="#FBBF24" stroke="#D62828"/>
+    <circle cx="41" cy="43" r="3" fill="#FBBF24" stroke="#D62828"/>
+    <path d="M22 55l-4 5"/>
+    <path d="M42 55l4 5"/>
+    <path d="M27 55h10"/>
+  </g>
+</svg>

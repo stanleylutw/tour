@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">票券</title>
+  <g fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 22a6 6 0 0 0 0 12v8a4 4 0 0 0 4 4h36a4 4 0 0 0 4-4v-8a6 6 0 0 0 0-12v-6a4 4 0 0 0-4-4H14a4 4 0 0 0-4 4v6Z" fill="#38BDF8" stroke="#0B3D91"/>
+    <path d="M24 14v36" stroke="#0B3D91" stroke-dasharray="3 5"/>
+    <path d="M34 24h12"/>
+    <path d="M34 32h8"/>
+    <path d="M34 40h12"/>
+    <circle cx="17" cy="29" r="3" fill="#FBBF24" stroke="#D62828"/>
+  </g>
+</svg>
