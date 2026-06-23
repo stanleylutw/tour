@@ -1,4 +1,4 @@
-# 2026 NY Itinerary 附件整理 v3.15
+# 2026 NY Itinerary 附件整理 v3.16
 
 ## 本次整理範圍
 
@@ -68,6 +68,7 @@
 - Daily card detail order：每日行程卡片內容順序調整為「當日重點、交通 / 時間、住宿、費用」。
 - Precise day jump：行程列點選日期時改用 sticky topbar/calendar 高度計算精準捲動位置，避免畫面停在前一天的上傳照片區。
 - First edition checklist：新增 `notes/first_edition_checklist.md`，整理第一版資料完整度、優先待補項目與每日行程缺口。
+- Mobile calendar continuity：移除行程列的週分組容器，讓 Day 1-23 在手機上成為真正連續的一排，避免週交界出現大空白。
 
 ## 行程重點整理
 

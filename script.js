@@ -331,13 +331,7 @@ function updateCalendarModeButton(calendarMode) {
 }
 
 function weekStripTemplate(days, activeDayId) {
-  return `${groupDaysByTripWeek(days).map((week) => `
-    <div class="week-group">
-      <div class="week-days">
-        ${week.days.map((day) => dayJumpTemplate(day, day.id === activeDayId)).join("")}
-      </div>
-    </div>
-  `).join("")}`;
+  return days.map((day) => dayJumpTemplate(day, day.id === activeDayId)).join("");
 }
 
 function dayJumpTemplate(day, active) {
@@ -486,23 +480,6 @@ function statusClass(status) {
 
 function compactCity(city) {
   return String(city).replace("紐約大都會區", "NY Metro").replace("Ocean Cay MSC Marine Reserve", "Ocean Cay");
-}
-
-function tripWeekNumber(dayNumber) {
-  return Math.ceil(dayNumber / 7);
-}
-
-function groupDaysByTripWeek(days) {
-  return days.reduce((groups, day) => {
-    const week = tripWeekNumber(day.day);
-    let group = groups.find((item) => item.week === week);
-    if (!group) {
-      group = { week, days: [] };
-      groups.push(group);
-    }
-    group.days.push(day);
-    return groups;
-  }, []);
 }
 
 function toIsoDate(date) {
