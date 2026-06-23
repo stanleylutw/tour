@@ -32,6 +32,13 @@ English correction: `...`
 5. `#rttbj` = build with RTT debug + flash by J-Link tool，建置 RTT debug firmware 後使用 J-Link tool 燒錄。
 6. RTT debug firmware 僅用於 bring-up、sensor log、CW/CCW 校正與問題分析；正式驗證需回到 normal build。
 
+## GitHub / Git 操作規則
+1. 若專案已連結 GitHub remote，Codex 修改檔案後不可自動 commit 或 push。
+2. Commit、tag、push、pull request 等 GitHub 同步動作，必須等待使用者明確下指令後才可執行。
+3. 修改完成後，Codex 只能回報修改內容、測試結果與目前 `git status`，不可主動建立 commit 或推送到遠端。
+4. 若使用者只說「修改」、「調整」、「修正」、「更新 UI」等，代表只做檔案修改與驗證，不代表允許 commit 或 push。
+5. 只有當使用者明確說「commit」、「push」、「上傳到 GitHub」、「發 PR」或同等意思時，Codex 才可以執行對應 Git 操作。
+
 ## Plan Markdown 版本管理規則
 1. 修改主要 plan 文件時，必須同步更新文件版本號。
 2. 版本號格式使用 `vMAJOR.MINOR`，例如 `v1.3`。

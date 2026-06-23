@@ -1,4 +1,4 @@
-# 2026 NY Itinerary 附件整理 v3.18
+# 2026 NY Itinerary 附件整理 v3.22
 
 ## 本次整理範圍
 
@@ -21,6 +21,8 @@
 | 圖片 | `attachments/images/msc_seaside_booking_69082323.jpg` | MSC Seaside booking 69082323 截圖 |
 | HTML asset | `assets/images/ny_itinerary_banner_2026.png` | 2026 NY itinerary HTML 頁首布條，2048 x 768 |
 | HTML asset | `assets/images/family_logo_2026.png` | 2026 NY itinerary family logo，透明背景 PNG，1448 x 1087 |
+| PWA app icons | `assets/app-icons/` | 使用 family logo 產生 iOS / Android 加入主畫面的 app icon |
+| PWA manifest | `manifest.webmanifest` | 加入主畫面的 app 名稱、icon、theme color 與 standalone 設定 |
 | HTML icons | `assets/icons/` | 2026 NY itinerary SVG icons，11 個 trip essentials icons |
 | HTML plan | `notes/html_itinerary_plan.md` | Family Trip Portal HTML 中文實作規劃 |
 | HTML QA | `notes/first_edition_checklist.md` | 第一版 itinerary 資料完整度與待補項目檢查 |
@@ -61,7 +63,7 @@
 - Hotel GPS links：住宿欄位新增 GPS 按鈕，已知住宿地址與飯店會自動連到 Google Maps；新增 `assets/icons/gps.svg`。
 - GPS icon refinement：GPS 按鈕改為純 icon，移除 `GPS` 文字，並將 `assets/icons/gps.svg` 更新為地圖加定位針樣式。
 - Month calendar jump：月曆模式點選日期後會自動切回行程列，將選取的 Day card 置中，並把正文跳到該日資訊。
-- Topbar title cleanup：左側「所有旅程」改為純三線 menu icon，目前旅程按鈕改為顯示行程標題；回主選單時顯示 `Family Trip Portal`。
+- Topbar title cleanup：左側「所有旅程」改為純三線 menu icon，目前旅程按鈕改為顯示行程標題；回主選單時顯示 `旅遊日誌`。
 - Topbar menu alignment：修正三線 menu icon 被 `margin-left: auto` 推離左側的問題，讓 menu icon 固定在 topbar 左側。
 - Today itinerary auto jump：開啟旅程時若今天精準對應某一個行程日期，會自動跳到當日行程；若今天不在旅程日期內，保持初始頁首。
 - Calendar strip compact UI：移除行程列外層大卡片感、陰影與左右邊框，縮小上下 padding 並隱藏水平捲軸，讓 Day cards 更像貼近頁面的水平導覽。
@@ -71,6 +73,10 @@
 - Mobile calendar continuity：移除行程列的週分組容器，讓 Day 1-23 在手機上成為真正連續的一排，避免週交界出現大空白。
 - Row calendar card simplification：行程列 Day card 簡化為 `Day XX` 與日期兩行，手機寬度一屏顯示 3 張完整卡片，選取卡片置中，左右留白與內容區一致。
 - Login background cleanup：登入頁背景改為一般淺色背景，不再使用 NY banner；NY banner 保留在旅程主頁 hero。
+- Month calendar simplification：topbar 月曆 / 行程列切換改為純 icon，旅程標題移除定位 icon；月曆日卡只顯示日期，已確認行程為淡綠色，未確認行程為白色。
+- Month calendar status color：月曆日卡淡綠色範圍加入 `部分確認`；`待規劃` 維持白色。
+- Month calendar pending rule：月曆日卡只有 `待規劃` 維持白色，其它狀態全部使用淡綠色。
+- PWA home screen metadata：新增 `manifest.webmanifest` 與 apple touch icon，使用 family logo 產生 app icons；加入主畫面名稱改為中文 `旅遊日誌`，英文 short name 為 `Itinerary`。
 
 ## 行程重點整理
 

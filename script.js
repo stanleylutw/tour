@@ -180,7 +180,7 @@ function parseDate(value) {
 
 function showPortal() {
   document.querySelector("#calendar-mode-button").classList.add("hidden");
-  updateTopbarTripTitle("Family Trip Portal");
+  updateTopbarTripTitle("旅遊日誌");
   document.querySelector("#trip-view").classList.add("hidden");
   document.querySelector("#portal-view").classList.remove("hidden");
   renderTripList();
@@ -326,8 +326,10 @@ function currentCalendarMode() {
 
 function updateCalendarModeButton(calendarMode) {
   const button = document.querySelector("#calendar-mode-button");
-  button.querySelector("span[aria-hidden='true']").textContent = calendarMode === "month" ? "▦" : "▣";
-  button.querySelector("span:last-child").textContent = calendarMode === "month" ? "行程列" : "月曆";
+  const nextLabel = calendarMode === "month" ? "切換到行程列模式" : "切換到月曆模式";
+  button.querySelector("span[aria-hidden='true']").textContent = calendarMode === "month" ? "▤" : "▦";
+  button.setAttribute("aria-label", nextLabel);
+  button.setAttribute("title", nextLabel);
 }
 
 function weekStripTemplate(days, activeDayId) {
@@ -372,12 +374,10 @@ function calendarCellTemplate(date, day, activeDayId) {
   if (!day) {
     return `<div class="calendar-cell muted"><span>${date.getMonth() + 1}/${date.getDate()}</span></div>`;
   }
+  const confirmationClass = isCalendarConfirmedStatus(day.status) ? "confirmed" : "unconfirmed";
   return `
-    <button class="calendar-cell has-trip ${day.id === activeDayId ? "active" : ""}" type="button" data-jump-day="${day.id}" aria-label="跳到 Day ${day.day}">
+    <button class="calendar-cell has-trip ${confirmationClass} ${day.id === activeDayId ? "active" : ""}" type="button" data-jump-day="${day.id}" aria-label="跳到 Day ${day.day}">
       <span class="calendar-date">${date.getMonth() + 1}/${date.getDate()}</span>
-      <strong>Day ${day.day}</strong>
-      <small>${day.weekday} · ${escapeHtml(compactCity(day.city))}</small>
-      <span class="day-jump-status ${statusClass(day.status)}" aria-hidden="true"></span>
     </button>
   `;
 }
@@ -465,6 +465,10 @@ function chooseInitialDay(trip) {
 
 function isConfirmedStatus(status) {
   return status.includes("已確認") || status.includes("已付款") || status.includes("已訂房");
+}
+
+function isCalendarConfirmedStatus(status) {
+  return !status.includes("待規劃");
 }
 
 function statusClass(status) {

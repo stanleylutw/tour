@@ -207,6 +207,7 @@ a:hover {
 .trip-title-button {
   min-width: 0;
   max-width: min(46vw, 420px);
+  gap: 0;
 }
 
 .trip-title-button span:last-child {
@@ -221,9 +222,13 @@ a:hover {
 }
 
 #calendar-mode-button {
+  width: 48px;
   margin-left: auto;
+  justify-content: center;
+  padding: 0;
   border-color: var(--button-border);
   background: var(--button-soft);
+  font-size: 1.22rem;
 }
 
 #menu-button {
@@ -506,16 +511,15 @@ a:hover {
 }
 
 .calendar-cell {
-  min-height: 72px;
+  min-height: 54px;
   display: grid;
-  align-content: start;
-  gap: 3px;
-  padding: 7px;
+  place-items: center;
+  padding: 7px 4px;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: #fff;
   color: var(--ink);
-  text-align: left;
+  text-align: center;
 }
 
 .calendar-cell.muted {
@@ -529,29 +533,17 @@ a:hover {
   box-shadow: 0 8px 18px rgba(11, 61, 145, 0.14);
 }
 
+.calendar-cell.has-trip.confirmed {
+  background: #e9f8ef;
+  border-color: #bfe8ca;
+}
+
+.calendar-cell.has-trip.unconfirmed {
+  background: #fff;
+}
+
 .calendar-cell.has-trip.active {
-  background: var(--active-soft);
   color: var(--ink);
-}
-
-.calendar-cell strong {
-  font-size: 0.78rem;
-  line-height: 1;
-}
-
-.calendar-cell small {
-  display: -webkit-box;
-  overflow: hidden;
-  color: var(--muted);
-  font-size: 0.68rem;
-  font-weight: 800;
-  line-height: 1.15;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-}
-
-.calendar-cell.active small {
-  color: var(--navy);
 }
 
 .calendar-date {

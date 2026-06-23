@@ -3,8 +3,16 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Family Trip Portal</title>
+    <title>旅遊日誌 | Itinerary</title>
     <meta name="description" content="家庭旅行入口網站與旅行紀錄書">
+    <meta name="application-name" content="旅遊日誌">
+    <meta name="apple-mobile-web-app-title" content="旅遊日誌">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#f5f8fc">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="apple-touch-icon" href="assets/app-icons/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="assets/app-icons/icon-192.png">
     <link rel="stylesheet" href="styles.css">
   </head>
   <body>
@@ -12,7 +20,7 @@
       <section id="login-screen" class="login-screen" aria-labelledby="login-title">
         <div class="login-panel">
           <img class="login-logo" src="assets/images/family_logo_2026.png" alt="Family logo">
-          <p class="eyebrow">Family Trip Portal</p>
+          <p class="eyebrow">Itinerary</p>
           <h1 id="login-title">我們的旅行紀錄書</h1>
           <p class="login-copy">輸入 family passcode 後，就可以查看行程、上傳每日照片、寫下旅行心得。</p>
           <form id="login-form" class="login-form">
@@ -32,19 +40,17 @@
             <span aria-hidden="true">☰</span>
           </button>
           <button id="current-trip-button" class="icon-text-button trip-title-button" type="button">
-            <span aria-hidden="true">⌖</span>
-            <span>Family Trip Portal</span>
+            <span>旅遊日誌</span>
           </button>
           <button id="calendar-mode-button" class="icon-text-button hidden" type="button" aria-label="切換月曆模式">
             <span aria-hidden="true">▣</span>
-            <span>月曆</span>
           </button>
           <button id="logout-button" class="icon-button" type="button" aria-label="登出">⎋</button>
         </header>
 
         <section id="portal-view" class="portal-view hidden" aria-labelledby="portal-title">
           <div class="section-heading">
-            <p class="eyebrow">Family Trip Portal</p>
+            <p class="eyebrow">Itinerary</p>
             <h1 id="portal-title">所有旅程</h1>
             <p>未來每一次旅行都會放在這裡。系統會自動幫你打開最接近的行程。</p>
           </div>

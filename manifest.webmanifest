@@ -1,0 +1,25 @@
+{
+  "name": "旅遊日誌",
+  "short_name": "Itinerary",
+  "description": "家庭旅行行程與旅行紀錄書",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f5f8fc",
+  "theme_color": "#0B3D91",
+  "lang": "zh-Hant",
+  "icons": [
+    {
+      "src": "assets/app-icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "assets/app-icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
