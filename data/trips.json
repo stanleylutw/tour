@@ -12,5 +12,19 @@
     "banner": "assets/images/ny_itinerary_banner_2026.png",
     "logo": "assets/images/family_logo_2026.png",
     "data": "data/trips/2026-ny.json"
+  },
+  {
+    "id": "2026-osaka",
+    "title": "2026 暑遊大阪",
+    "subtitle": "Taipei to Osaka summer trip",
+    "destination": "Osaka, Japan",
+    "startDate": "2026-08-17",
+    "endDate": "2026-08-20",
+    "people": 2,
+    "peopleNote": "2 人",
+    "status": "draft",
+    "banner": "assets/trips/2026-osaka/images/banner.png",
+    "logo": "assets/trips/2026-osaka/images/family-logo.png",
+    "data": "data/trips/2026-osaka.json"
   }
 ]

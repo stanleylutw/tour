@@ -288,8 +288,10 @@ function updateTopbarTripTitle(title) {
 
 function renderTripList() {
   const list = document.querySelector("#trip-list");
+  const pinnedTripId = localStorage.getItem(PINNED_TRIP_KEY);
   list.innerHTML = state.trips.map((trip) => {
     const status = tripStatus(trip);
+    const isPinned = trip.id === pinnedTripId;
     return `
       <article class="trip-card">
         <img src="${escapeAttr(trip.banner)}" alt="${escapeAttr(trip.title)}">
@@ -301,10 +303,14 @@ function renderTripList() {
             <span class="chip">${escapeHtml(trip.peopleNote || `${trip.people} 人`)}</span>
             <span class="chip">${status}</span>
             ${trip.id === state.nearestTripId ? '<span class="chip">目前旅程</span>' : ""}
+            ${isPinned ? '<span class="chip">已固定</span>' : ""}
           </div>
           <div class="hero-actions">
             <button class="primary-button" type="button" data-open-trip="${trip.id}">打開旅程</button>
-            <button class="ghost-button" type="button" data-pin-trip="${trip.id}">固定此旅程</button>
+            ${isPinned
+              ? `<button class="ghost-button" type="button" data-unpin-trip="${trip.id}">取消固定</button>`
+              : `<button class="ghost-button" type="button" data-pin-trip="${trip.id}">固定此旅程</button>`
+            }
           </div>
         </div>
       </article>
@@ -317,6 +323,15 @@ function renderTripList() {
     button.addEventListener("click", () => {
       localStorage.setItem(PINNED_TRIP_KEY, button.dataset.pinTrip);
       showTrip(button.dataset.pinTrip);
+    });
+  });
+  list.querySelectorAll("[data-unpin-trip]").forEach((button) => {
+    button.addEventListener("click", () => {
+      localStorage.removeItem(PINNED_TRIP_KEY);
+      renderTripList();
+      if (button.dataset.unpinTrip === state.activeTripId) {
+        showTrip(state.nearestTripId || state.trips[0]?.id);
+      }
     });
   });
 }
@@ -783,7 +798,8 @@ function mapLinkForLodging(value) {
     { match: "1057 Harding Road", query: "1057 Harding Road, Elizabeth, NJ" },
     { match: "Beach Plaza Hotel", query: "Beach Plaza Hotel, 1401 Collins Ave, Miami Beach, FL" },
     { match: "Golden Tulip Incheon", query: "Golden Tulip Incheon Airport Hotel & Suites" },
-    { match: "Crowne Plaza Niagara Falls", query: "Crowne Plaza Niagara Falls NY - Riverside by IHG" }
+    { match: "Crowne Plaza Niagara Falls", query: "Crowne Plaza Niagara Falls NY - Riverside by IHG" },
+    { match: "Hotel Hokke Club Osaka", query: "Hotel Hokke Club Osaka, 12 Toganocho, Kita Ward, Osaka" }
   ];
   const location = knownLocations.find((item) => lodging.includes(item.match));
   if (!location) return "";

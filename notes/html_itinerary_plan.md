@@ -1,4 +1,13 @@
-# Family Trip Portal HTML 規劃 v1.0
+# Family Trip Portal HTML 規劃 v1.1
+
+Last updated: 2026-06-24 23:43:20 [Codex]
+
+## Revision History
+
+| Version | Date Time | Summary | Who |
+|---|---|---|---|
+| v1.1 | 2026-06-24 23:43:20 | 新增 NY UI template 與新旅程資料夾規則 | Codex |
+| v1.0 | 2026-06-24 00:00:00 | 建立 Family Trip Portal 第一版 HTML 規劃 | Codex |
 
 ## 專案定位
 
@@ -37,11 +46,12 @@ data/
 assets/
   icons/
   trips/
-    2026-ny/
-      banner.png
-      family-logo.png
+    <tour-id>/
+      images/
       attachments/
-      photos/
+        images/
+        pdf/
+        raw/
 ```
 
 目前已有素材可先保留在：
@@ -54,6 +64,68 @@ attachments/
 ```
 
 實作第一版時，可先直接使用現有路徑；若要進一步整理，再搬到 `assets/trips/2026-ny/`。
+
+## NY UI Template 與新旅程建立規則
+
+2026 NY tour 是第一個實作完成的旅程，也作為後續所有 tour 的 UI template。
+
+新增日本、歐洲、郵輪或其他旅程時，原則如下：
+
+- 不複製新的 HTML app。
+- 不為單一旅程新增獨立 CSS / JS。
+- 所有旅程共用 `index.html`、`styles.css`、`script.js`。
+- 新旅程只新增資料與素材：`data/trips/<tour-id>.json`、`assets/trips/<tour-id>/...`。
+- 新旅程必須更新 `data/trips.json`，讓首頁可以自動選擇最近或進行中的旅程。
+- 新旅程的 UI 應沿用目前 NY tour 的格式：login、main menu、banner、overview、month calendar、row calendar、daily cards、bookings、record book、pending checklist、附件預覽 modal。
+
+新旅程 ID 建議使用：
+
+```text
+YYYY-destination
+```
+
+範例：
+
+```text
+2027-japan
+2028-europe
+2029-alaska-cruise
+```
+
+當使用者上傳新 tour 的附件時，Codex 應建立：
+
+```text
+assets/trips/<tour-id>/
+  images/
+  attachments/
+    images/
+    pdf/
+    raw/
+```
+
+檔案用途：
+
+- `images/`：旅程 banner、family logo、封面素材。
+- `attachments/images/`：截圖、票券圖片、飯店確認圖。
+- `attachments/pdf/`：訂房確認、票券 PDF、收據 PDF。
+- `attachments/raw/`：文字、OCR、原始貼上資料。
+
+新旅程 JSON 的路徑範例：
+
+```json
+{
+  "id": "2027-japan",
+  "title": "2027 日本家庭旅行",
+  "destination": "Japan",
+  "startDate": "2027-02-01",
+  "endDate": "2027-02-10",
+  "banner": "assets/trips/2027-japan/images/banner.png",
+  "logo": "assets/trips/2027-japan/images/family-logo.png",
+  "data": "data/trips/2027-japan.json"
+}
+```
+
+若新旅程資料尚未完整，仍可先建立 draft tour。缺少時間、價格、票券、住宿或交通時，在 JSON 裡使用 `待確認` 或 `待規劃`，不要空白。
 
 ## 多旅程資料設計
 

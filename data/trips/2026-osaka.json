@@ -1,0 +1,131 @@
+{
+  "id": "2026-osaka",
+  "title": "2026 暑遊大阪",
+  "subtitle": "Taipei to Osaka summer trip",
+  "destination": "Osaka, Japan",
+  "startDate": "2026-08-17",
+  "endDate": "2026-08-20",
+  "people": 2,
+  "peopleNote": "2 人",
+  "groups": [
+    {
+      "label": "同行旅客",
+      "count": 2,
+      "note": "成員名單待補"
+    }
+  ],
+  "banner": "assets/trips/2026-osaka/images/banner.png",
+  "logo": "assets/trips/2026-osaka/images/family-logo.png",
+  "theme": {
+    "primary": "#0B3D91",
+    "accent": "#D62828",
+    "sun": "#FBBF24",
+    "sky": "#38BDF8"
+  },
+  "quickFacts": [
+    {
+      "label": "總天數",
+      "value": "4 天"
+    },
+    {
+      "label": "人數",
+      "value": "2 人"
+    },
+    {
+      "label": "主軸",
+      "value": "大阪暑假小旅行"
+    },
+    {
+      "label": "紀錄書",
+      "value": "每日照片與心得"
+    }
+  ],
+  "bookings": [
+    {
+      "type": "flight",
+      "title": "Cathay Pacific TPE-KIX 來回機票",
+      "status": "已訂購",
+      "summary": "2026-08-17 CX564 TPE 11:05 -> KIX 14:50；2026-08-20 CX565 KIX 16:15 -> TPE 18:15",
+      "price": "TWD 13,694",
+      "source": "assets/trips/2026-osaka/attachments/images/cathay_tpe_kix_roundtrip_trip_com.jpg"
+    },
+    {
+      "type": "hotel",
+      "title": "Hotel Hokke Club Osaka",
+      "status": "已付款並正式訂房",
+      "summary": "2026-08-17 至 2026-08-20，3 nights；Google 顯示地址為 12 Toganocho, Kita Ward, Osaka",
+      "price": "US$287.08 / 28,708 miles",
+      "source": "assets/trips/2026-osaka/attachments/images/hotel_hokke_club_osaka_checkout.jpg"
+    }
+  ],
+  "pendingItems": [
+    "補齊 8/18 與 8/19 的大阪每日行程。",
+    "確認是否需要加入大阪交通票券、餐廳、景點門票或購物安排。",
+    "補齊正式旅程 banner 或代表照片。"
+  ],
+  "days": [
+    {
+      "id": "day-01",
+      "day": 1,
+      "date": "2026-08-17",
+      "weekday": "一",
+      "city": "台北 -> 大阪",
+      "icon": "flight",
+      "status": "已確認",
+      "transport": "CX564 TPE 11:05 -> KIX 14:50",
+      "lodging": "Hotel Hokke Club Osaka",
+      "highlights": "從台北飛往大阪，抵達關西國際機場後前往市區與飯店。",
+      "cost": "機票 TWD 13,694；住宿 US$287.08 / 28,708 miles",
+      "sources": [
+        "assets/trips/2026-osaka/attachments/images/cathay_tpe_kix_roundtrip_trip_com.jpg",
+        "assets/trips/2026-osaka/attachments/images/hotel_hokke_club_osaka_google_search.png"
+      ],
+      "calendarIcon": "airplane"
+    },
+    {
+      "id": "day-02",
+      "day": 2,
+      "date": "2026-08-18",
+      "weekday": "二",
+      "city": "大阪",
+      "icon": "map-pin",
+      "status": "待規劃",
+      "transport": "大阪市區交通待安排",
+      "lodging": "Hotel Hokke Club Osaka",
+      "highlights": "大阪市區行程待規劃。",
+      "cost": "待確認",
+      "sources": []
+    },
+    {
+      "id": "day-03",
+      "day": 3,
+      "date": "2026-08-19",
+      "weekday": "三",
+      "city": "大阪",
+      "icon": "map-pin",
+      "status": "待規劃",
+      "transport": "大阪市區交通待安排",
+      "lodging": "Hotel Hokke Club Osaka",
+      "highlights": "大阪市區或近郊行程待規劃。",
+      "cost": "待確認",
+      "sources": []
+    },
+    {
+      "id": "day-04",
+      "day": 4,
+      "date": "2026-08-20",
+      "weekday": "四",
+      "city": "大阪 -> 台北",
+      "icon": "flight",
+      "status": "已確認",
+      "transport": "CX565 KIX 16:15 -> TPE 18:15",
+      "lodging": "返台",
+      "highlights": "退房後前往關西國際機場，搭機返回台北。",
+      "cost": "機票已列入來回總額",
+      "sources": [
+        "assets/trips/2026-osaka/attachments/images/cathay_tpe_kix_roundtrip_trip_com.jpg"
+      ],
+      "calendarIcon": "airplane"
+    }
+  ]
+}

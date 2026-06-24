@@ -1,4 +1,4 @@
-# 2026 NY Itinerary 附件整理 v3.46
+# 2026 NY Itinerary 附件整理 v3.48
 
 ## 本次整理範圍
 
@@ -32,6 +32,8 @@
 | HTML app | `script.js` | Family Trip Portal 第一版互動、登入、本機儲存與紀錄書邏輯 |
 | JSON data | `data/trips.json` | 多旅程入口清單 |
 | JSON data | `data/trips/2026-ny.json` | 2026 NY 第一個旅程資料 |
+| Tour template | `assets/trips/_template/` | 新旅程素材資料夾範本 |
+| JSON template | `data/trips/_template.json` | 新旅程 JSON 結構範本 |
 
 ## HTML 開發素材
 
@@ -104,6 +106,8 @@
 - Login default calendar mode：登入 / 重新進入 app 時預設顯示 month calendar，避免上次行程列模式殘留。
 - Attachment preview modal：附件與照片改為 app 內 modal 預覽，提供明確關閉按鈕，避免 iOS Home Screen app 開啟圖片 / PDF 後無法返回。
 - Login vertical position：登入卡片改為偏上視覺置中，改善 iOS / mobile 畫面中卡片偏低的感覺。
+- Pinned trip control：主選單固定旅程功能補齊 `取消固定`，與 `notes/html_itinerary_plan.md` 的 override 設計一致。
+- New tour template rules：將 2026 NY UI 定義為新旅程共用 template，新增 `assets/trips/_template/` 與 `data/trips/_template.json`，未來新 tour 附件需保存到各自 tour folder。
 
 ## 行程重點整理
 

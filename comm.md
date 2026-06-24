@@ -39,6 +39,32 @@ English correction: `...`
 4. 若使用者只說「修改」、「調整」、「修正」、「更新 UI」等，代表只做檔案修改與驗證，不代表允許 commit 或 push。
 5. 只有當使用者明確說「commit」、「push」、「上傳到 GitHub」、「發 PR」或同等意思時，Codex 才可以執行對應 Git 操作。
 
+## Family Trip Portal 新旅程規則
+1. 2026 NY tour 的 HTML UI 是 Family Trip Portal 的標準 template；新增旅程時不得為單一旅程另外複製一套 HTML/CSS/JS。
+2. 新旅程必須沿用現有 `index.html`、`styles.css`、`script.js` 的共用 UI，由 `data/trips.json` 與 `data/trips/<tour-id>.json` 提供內容。
+3. 新旅程 ID 使用小寫 slug，建議格式為 `YYYY-destination`，例如 `2027-japan`、`2028-europe`。
+4. 每個新 itinerary 都必須有自己的 tour folder 與 itinerary page data：`assets/trips/<tour-id>/` 與 `data/trips/<tour-id>.json`。此 page 由共用 `index.html` 動態渲染，不另外複製 HTML/CSS/JS。
+5. 使用者上傳新旅程附件時，Codex 必須建立對應資料夾：`assets/trips/<tour-id>/`。
+6. 新旅程資料夾標準結構如下：
+
+```text
+assets/trips/<tour-id>/
+  images/
+  attachments/
+    images/
+    pdf/
+    raw/
+```
+
+7. 新旅程的 banner、logo、附件、票券、訂房截圖與文字資料，都應保存到該旅程資料夾，不應再混放到 NY tour 的共用附件資料夾。
+8. 若新旅程沒有提供 banner，Codex 必須參考 NY banner 的視覺風格，為該旅程設計一張新的專屬 banner，並保存為 `assets/trips/<tour-id>/images/banner.png`。
+9. 新旅程 JSON 內的 `banner`、`logo`、`bookings[].source`、`days[].sources` 必須指向該旅程資料夾底下的相對路徑。
+10. 新增或更新 hotel / stay house / 住宿地址時，Codex 必須同步建立 GPS Google Maps 連結，讓住宿欄位旁自動顯示 GPS icon；若地址不完整，需在待辦標示「補齊住宿 GPS 地址」。
+11. 新旅程新增流程：先建立資料夾與 `data/trips/<tour-id>.json`，再更新 `data/trips.json`，最後確認首頁可自動選擇最近旅程。
+12. 若使用者只提供部分資料，Codex 可以先建立 draft tour，缺少內容以 `待確認`、`待規劃` 標示。
+13. 新旅程建立完成後，Codex 需回報新增資料夾、JSON 路徑、已整理附件與待補資訊；除非使用者明確要求，不可自動 commit 或 push。
+14. 當使用者說 `create a new itinerary` 或類似意思時，Codex 必須依照 `notes/new_itinerary_creation_workflow.md` 逐步詢問初始資訊，不可一次要求所有資料，也不可直接複製新的 HTML/CSS/JS。
+
 ## Plan Markdown 版本管理規則
 1. 修改主要 plan 文件時，必須同步更新文件版本號。
 2. 版本號格式使用 `vMAJOR.MINOR`，例如 `v1.3`。
