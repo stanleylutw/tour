@@ -16,6 +16,7 @@
   --warn: #a76700;
   --danger: #b42318;
   --shadow: 0 16px 40px rgba(15, 47, 90, 0.12);
+  --banner-ratio: 16 / 6;
 }
 
 * {
@@ -228,7 +229,17 @@ a:hover {
   padding: 0;
   border-color: var(--button-border);
   background: var(--button-soft);
-  font-size: 1.22rem;
+}
+
+.mode-icon {
+  width: 29px;
+  height: 29px;
+  display: block;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 #menu-button {
@@ -272,7 +283,7 @@ a:hover {
 
 .trip-card img {
   width: 100%;
-  aspect-ratio: 16 / 6;
+  aspect-ratio: var(--banner-ratio);
   object-fit: cover;
   display: block;
 }
@@ -328,15 +339,13 @@ a:hover {
   overflow: hidden;
   border-radius: 8px;
   background: var(--navy);
-  color: #fff;
   box-shadow: 0 10px 26px rgba(15, 47, 90, 0.12);
 }
 
 .hero-image {
   position: relative;
-  min-height: 248px;
-  display: grid;
-  align-items: end;
+  aspect-ratio: var(--banner-ratio);
+  overflow: hidden;
   background-position: center 42%;
   background-size: cover;
 }
@@ -345,36 +354,6 @@ a:hover {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(5, 20, 45, 0.05), rgba(5, 20, 45, 0.78));
-}
-
-.hero-content {
-  position: relative;
-  z-index: 1;
-  padding: 16px;
-}
-
-.hero-logo {
-  width: min(128px, 34vw);
-  display: block;
-  margin-bottom: 8px;
-}
-
-.hero-content h1 {
-  margin: 0;
-  max-width: 760px;
-  font-size: 1.72rem;
-  line-height: 1.08;
-  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.24);
-}
-
-.hero-content p {
-  margin: 8px 0 0;
-  color: rgba(255, 255, 255, 0.92);
-  font-weight: 700;
-}
-
-.hero-subtitle {
   display: none;
 }
 
@@ -410,7 +389,7 @@ a:hover {
   position: sticky;
   top: 61px;
   z-index: 12;
-  margin: 8px 0 12px;
+  margin: 4px 0 12px;
   border-top: 1px solid rgba(11, 61, 145, 0.12);
   border-bottom: 1px solid rgba(11, 61, 145, 0.12);
   background: rgba(245, 248, 252, 0.94);
@@ -556,6 +535,78 @@ a:hover {
   color: var(--navy);
 }
 
+.month-day-summary {
+  width: 100%;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: center;
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  color: var(--ink);
+  text-align: left;
+  box-shadow: 0 8px 18px rgba(16, 32, 51, 0.06);
+}
+
+.month-day-summary:hover {
+  border-color: var(--button-border);
+  background: var(--button-soft);
+}
+
+.month-day-summary-content {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.month-day-summary-kicker {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+}
+
+.month-day-summary strong {
+  overflow: hidden;
+  color: var(--navy);
+  font-size: 1.02rem;
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.month-day-summary-content span:last-child {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.month-day-summary-content span:nth-child(3) {
+  overflow: hidden;
+  color: var(--muted);
+  font-size: 0.88rem;
+  font-weight: 800;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.month-day-more {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  place-items: center;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--navy);
+  font-size: 1.5rem;
+  font-weight: 900;
+}
+
 .tab-button {
   flex: 0 0 auto;
   padding: 0 12px;
@@ -573,6 +624,11 @@ a:hover {
   margin: 0 0 28px;
 }
 
+#overview.content-section {
+  gap: 0;
+  margin-bottom: 8px;
+}
+
 .overview-grid,
 .booking-grid,
 .record-grid {
@@ -587,13 +643,17 @@ a:hover {
   box-shadow: 0 10px 28px rgba(16, 32, 51, 0.08);
 }
 
+.trip-summary-card {
+  margin: 10px 0 4px;
+}
+
 .overview-card summary {
-  min-height: 64px;
+  min-height: 54px;
   display: flex;
   gap: 12px;
   align-items: center;
   justify-content: space-between;
-  padding: 14px;
+  padding: 12px 14px;
   list-style: none;
   cursor: pointer;
 }
@@ -605,13 +665,35 @@ a:hover {
 .overview-card summary strong {
   display: block;
   color: var(--navy);
-  font-size: 1.25rem;
+  font-size: 1.06rem;
   line-height: 1.12;
 }
 
 .overview-card summary .eyebrow {
   display: block;
   margin-bottom: 3px;
+}
+
+.trip-summary-main {
+  min-width: 0;
+  display: block;
+}
+
+.summary-logo {
+  width: clamp(74px, 18vw, 124px);
+  max-width: 100%;
+  display: block;
+}
+
+.trip-summary-main p {
+  margin: 5px 0 0;
+  color: var(--muted);
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.trip-summary-main .trip-meta {
+  margin-top: 8px;
 }
 
 .details-toggle {
@@ -637,6 +719,27 @@ a:hover {
 
 .overview-card .overview-grid {
   padding: 0 14px 14px;
+}
+
+.overview-full-text {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr);
+  gap: 12px;
+  padding: 0 14px 14px;
+}
+
+.overview-full-text p {
+  margin: 0 0 10px;
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.overview-full-text p:last-child {
+  margin-bottom: 0;
+}
+
+.overview-full-text strong {
+  color: var(--navy);
 }
 
 .summary-panel {
@@ -681,6 +784,16 @@ a:hover {
 .day-icon img {
   width: 30px;
   height: 30px;
+}
+
+.day-icon.small {
+  width: 36px;
+  height: 36px;
+}
+
+.day-icon.small img {
+  width: 24px;
+  height: 24px;
 }
 
 .day-title-row {
@@ -891,18 +1004,6 @@ a:hover {
 
   .detail-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .hero-image {
-    min-height: 330px;
-  }
-
-  .hero-content h1 {
-    font-size: 2.8rem;
-  }
-
-  .hero-subtitle {
-    display: block;
   }
 
   .photo-strip {

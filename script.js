@@ -29,7 +29,7 @@ const state = {
   activeTripId: null,
   nearestTripId: null,
   activeDayId: null,
-  activeSection: "overview",
+  activeSection: "days",
   db: null,
   dayScrollHandler: null,
   dayObserver: null,
@@ -92,6 +92,7 @@ function bindTopbar() {
     renderTripCalendar(trip);
     updateCalendarModeButton(nextMode);
     setActiveDay(state.activeDayId || chooseInitialDay(trip).id, { center: true });
+    if (nextMode === "month") scrollToTripInitialView();
   });
   document.querySelector("#logout-button").addEventListener("click", () => {
     localStorage.removeItem(AUTH_KEY);
@@ -252,21 +253,8 @@ function renderTripList() {
 }
 
 function renderTripHero(trip) {
-  const status = tripStatus(trip);
-  const pinned = localStorage.getItem(PINNED_TRIP_KEY) === trip.id;
   document.querySelector("#trip-hero").innerHTML = `
-    <div class="hero-image" style="background-image: url('${escapeAttr(trip.banner)}')">
-      <div class="hero-content">
-        <img class="hero-logo" src="${escapeAttr(trip.logo)}" alt="Family logo">
-        <p class="eyebrow">${status} · ${trip.destination}</p>
-        <h1>${escapeHtml(trip.title)}</h1>
-        <p class="hero-subtitle">${escapeHtml(trip.subtitle || "")}</p>
-        <div class="trip-meta">
-          <span class="chip">${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}</span>
-          <span class="chip">${escapeHtml(trip.peopleNote || `${trip.people} 人`)}</span>
-        </div>
-      </div>
-    </div>
+    <div class="hero-image" style="background-image: url('${escapeAttr(trip.banner)}')" aria-label="${escapeAttr(trip.title)}"></div>
   `;
 }
 
@@ -285,21 +273,36 @@ function renderTripCalendar(trip) {
       jumpToDayFromCalendar(trip, button.dataset.jumpDay, calendarMode);
     });
   });
+  calendar.querySelector("[data-open-day-summary]")?.addEventListener("click", (event) => {
+    const dayId = event.currentTarget.dataset.openDaySummary;
+    openDayFromMonthSummary(trip, dayId);
+  });
 }
 
 function jumpToDayFromCalendar(trip, dayId, calendarMode) {
+  if (calendarMode === "month") {
+    setActiveDay(dayId);
+    renderTripCalendar(trip);
+    return;
+  }
+  openDayFromCalendar(dayId, calendarMode);
+}
+
+function openDayFromMonthSummary(trip, dayId) {
+  localStorage.setItem(CALENDAR_MODE_KEY, "strip");
+  renderTripCalendar(trip);
+  updateCalendarModeButton("strip");
+  openDayFromCalendar(dayId, "month");
+}
+
+function openDayFromCalendar(dayId, previousMode = "strip") {
   state.isCalendarJumping = true;
   window.clearTimeout(state.calendarJumpTimer);
-  if (calendarMode === "month") {
-    localStorage.setItem(CALENDAR_MODE_KEY, "strip");
-    renderTripCalendar(trip);
-    updateCalendarModeButton("strip");
-  }
   setActiveDay(dayId, { center: true });
   window.setTimeout(() => {
     setActiveDay(dayId, { center: true });
     scrollToDayCard(dayId);
-  }, calendarMode === "month" ? 80 : 160);
+  }, previousMode === "month" ? 80 : 160);
   state.calendarJumpTimer = window.setTimeout(() => {
     setActiveDay(dayId, { center: true });
     state.isCalendarJumping = false;
@@ -312,6 +315,16 @@ function scrollToDayCard(dayId) {
   const stickyOffset = stickyHeaderOffset();
   const targetTop = card.getBoundingClientRect().top + window.scrollY - stickyOffset;
   window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
+}
+
+function scrollToTripInitialView() {
+  window.setTimeout(() => {
+    const tripView = document.querySelector("#trip-view");
+    if (!tripView) return;
+    const topbarHeight = document.querySelector(".topbar")?.getBoundingClientRect().height || 0;
+    const targetTop = tripView.getBoundingClientRect().top + window.scrollY - topbarHeight - 8;
+    window.scrollTo({ top: Math.max(0, targetTop), behavior: "smooth" });
+  }, 40);
 }
 
 function stickyHeaderOffset() {
@@ -327,9 +340,28 @@ function currentCalendarMode() {
 function updateCalendarModeButton(calendarMode) {
   const button = document.querySelector("#calendar-mode-button");
   const nextLabel = calendarMode === "month" ? "切換到行程列模式" : "切換到月曆模式";
-  button.querySelector("span[aria-hidden='true']").textContent = calendarMode === "month" ? "▤" : "▦";
+  button.querySelector("span[aria-hidden='true']").innerHTML = calendarMode === "month" ? rowCalendarIcon() : monthCalendarIcon();
   button.setAttribute("aria-label", nextLabel);
   button.setAttribute("title", nextLabel);
+}
+
+function monthCalendarIcon() {
+  return `
+    <svg class="mode-icon" viewBox="0 0 24 24" role="img" aria-label="月曆">
+      <rect x="4" y="5" width="16" height="15" rx="3"></rect>
+      <path d="M8 3v4M16 3v4M4 10h16"></path>
+      <path d="M8 14h.01M12 14h.01M16 14h.01M8 17h.01M12 17h.01M16 17h.01"></path>
+    </svg>
+  `;
+}
+
+function rowCalendarIcon() {
+  return `
+    <svg class="mode-icon" viewBox="0 0 24 24" role="img" aria-label="行程列">
+      <path d="M5 7h14M5 12h14M5 17h14"></path>
+      <path d="M3 7h.01M3 12h.01M3 17h.01"></path>
+    </svg>
+  `;
 }
 
 function weekStripTemplate(days, activeDayId) {
@@ -367,6 +399,7 @@ function monthCalendarTemplate(days, activeDayId) {
     <div class="calendar-grid">
       ${cells.join("")}
     </div>
+    ${monthDaySummaryTemplate(days.find((day) => day.id === activeDayId) || days[0])}
   `;
 }
 
@@ -382,6 +415,28 @@ function calendarCellTemplate(date, day, activeDayId) {
   `;
 }
 
+function monthDaySummaryTemplate(day) {
+  const detailLines = monthDaySummaryDetails(day);
+  return `
+    <button class="month-day-summary" type="button" data-open-day-summary="${day.id}" aria-label="打開 Day ${day.day} 完整行程">
+      <span class="day-icon small"><img src="${iconMap[day.icon] || iconMap["map-pin"]}" alt=""></span>
+      <span class="month-day-summary-content">
+        <span class="month-day-summary-kicker">Day ${day.day} · ${formatDate(day.date)}（${day.weekday}）</span>
+        <strong>${escapeHtml(day.city)}</strong>
+        <span>${escapeHtml(detailLines[0])}</span>
+        <span>${escapeHtml(detailLines[1])}</span>
+      </span>
+      <span class="month-day-more" aria-hidden="true">›</span>
+    </button>
+  `;
+}
+
+function monthDaySummaryDetails(day) {
+  const lines = [day.highlights, day.transport, day.lodging, day.cost].filter(Boolean);
+  while (lines.length < 2) lines.push("查看當日完整行程");
+  return lines.slice(0, 2);
+}
+
 function setActiveDayJump(dayId) {
   document.querySelectorAll(".day-jump, .calendar-cell.has-trip").forEach((button) => {
     button.classList.toggle("active", button.dataset.jumpDay === dayId);
@@ -392,7 +447,21 @@ function setActiveDay(dayId, options = {}) {
   if (!dayId) return;
   state.activeDayId = dayId;
   setActiveDayJump(dayId);
+  updateMonthDaySummary(dayId);
   if (options.center) centerDayJump(dayId);
+}
+
+function updateMonthDaySummary(dayId) {
+  if (currentCalendarMode() !== "month") return;
+  const summary = document.querySelector(".month-day-summary");
+  if (!summary) return;
+  const trip = state.tripDetails.get(state.activeTripId);
+  const day = trip?.days.find((item) => item.id === dayId);
+  if (!day) return;
+  summary.outerHTML = monthDaySummaryTemplate(day);
+  document.querySelector("[data-open-day-summary]")?.addEventListener("click", (event) => {
+    openDayFromMonthSummary(trip, event.currentTarget.dataset.openDaySummary);
+  });
 }
 
 function centerDayJump(dayId) {
@@ -497,34 +566,42 @@ async function renderTripSections(trip) {
 }
 
 function renderOverview(trip) {
+  const status = tripStatus(trip);
   document.querySelector("#overview").innerHTML = `
-    <details class="overview-card">
+    <details class="overview-card trip-summary-card">
       <summary>
-        <span>
-          <span class="eyebrow">Overview</span>
-          <strong>旅程總覽</strong>
-        </span>
+        <div class="trip-summary-main">
+          <div>
+            <strong>${escapeHtml(trip.title)}</strong>
+            <p>${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}</p>
+          </div>
+        </div>
         <span class="details-toggle">展開</span>
       </summary>
-      <div class="overview-grid">
-        ${(trip.quickFacts || []).map((fact) => `
-          <div class="summary-panel">
-            <h3>${escapeHtml(fact.label)}</h3>
-            <p>${escapeHtml(fact.value)}</p>
-          </div>
-        `).join("")}
-        <div class="summary-panel">
-          <h3>今日模式</h3>
-          <p>${modeText(trip)}</p>
+      <div class="overview-full-text">
+        <div class="day-icon"><img src="${iconMap["ny-skyline"]}" alt=""></div>
+        <div>
+          <p><strong>${escapeHtml(status)} · ${escapeHtml(trip.destination)}</strong></p>
+          ${trip.subtitle ? `<p>${escapeHtml(trip.subtitle)}</p>` : ""}
+          <p>${escapeHtml(trip.peopleNote || `${trip.people} 人`)}。${modeText(trip)}</p>
+          ${overviewFactText(trip)}
+          ${peopleGroupsText(trip)}
+          <p>使用提醒：第一版資料保存在這台裝置的瀏覽器內；更換裝置後不會自動同步。</p>
         </div>
-        <div class="summary-panel">
-          <h3>使用提醒</h3>
-          <p>第一版資料保存在這台裝置的瀏覽器內；更換裝置後不會自動同步。</p>
-        </div>
-        ${peopleGroupsTemplate(trip)}
       </div>
     </details>
   `;
+}
+
+function overviewFactText(trip) {
+  if (!trip.quickFacts?.length) return "";
+  return trip.quickFacts.map((fact) => `<p>${escapeHtml(fact.label)}：${escapeHtml(fact.value)}</p>`).join("");
+}
+
+function peopleGroupsText(trip) {
+  if (!trip.groups?.length) return "";
+  const groups = trip.groups.map((group) => `${escapeHtml(group.label)} ${group.count} 人，${escapeHtml(group.note)}`).join("；");
+  return `<p>成員分組：${groups}。</p>`;
 }
 
 function peopleGroupsTemplate(trip) {

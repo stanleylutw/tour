@@ -1,4 +1,4 @@
-# 2026 NY Itinerary 附件整理 v3.22
+# 2026 NY Itinerary 附件整理 v3.31
 
 ## 本次整理範圍
 
@@ -77,6 +77,17 @@
 - Month calendar status color：月曆日卡淡綠色範圍加入 `部分確認`；`待規劃` 維持白色。
 - Month calendar pending rule：月曆日卡只有 `待規劃` 維持白色，其它狀態全部使用淡綠色。
 - PWA home screen metadata：新增 `manifest.webmanifest` 與 apple touch icon，使用 family logo 產生 app icons；加入主畫面名稱改為中文 `旅遊日誌`，英文 short name 為 `Itinerary`。
+- Banner size consistency：主選單旅程卡與旅程內頁 hero 共用 `16 / 6` banner 比例；旅程內頁內容改為覆蓋在 banner 上，不再撐高圖片，讓未來新增 itinerary 時 banner 尺寸一致。
+- Inner page hero cleanup：旅程內頁 banner 移除所有文字覆蓋，只保留圖片；banner 下方新增合併版 overview card，放入原本 banner 資訊與旅程總覽內容，並移除重複的總覽 tab。
+- Asset cache busting：`styles.css` 與 `script.js` 加入版本參數，降低 Safari / GitHub Pages 顯示舊版資源的機率。
+- Month calendar day summary：月曆模式點日期只更新選取日摘要，不再自動切換到行程列；點摘要卡或更多箭頭時才切回行程列並跳到該日完整資訊。
+- Month calendar summary format：月曆下方 day summary card 固定為四行：Day/date、main、detail、detail。
+- Overview compact text：overview summary 只顯示旅程標題與日期；展開內容改成單一文字區塊搭配 icon，避免多張小卡浪費空間。
+- Overview spacing refinement：移除 overview 的 `Itinerary` eyebrow，縮小標題與日期字級，並壓縮 overview 與 calendar 間距。
+- Month mode reset position：從行程列切回月曆模式時，頁面會回到初始視圖位置，顯示 banner、overview 與 month calendar。
+- Day text refinement：Day 12 抵達美國東岸描述由 `NY 的家人會合` 調整為 `NY 的友人會合`。
+- Calendar mode icons：topbar 月曆 / 行程列切換改為自製 inline SVG；月曆使用格狀 calendar icon，行程列使用水平 day card icon。
+- Calendar icon refinement：行程列 icon 簡化為水平列表樣式，月曆 / 行程列 icon 尺寸放大約 26%，更貼合 topbar button。
 
 ## 行程重點整理
 

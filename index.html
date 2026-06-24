@@ -13,7 +13,7 @@
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="apple-touch-icon" href="assets/app-icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="192x192" href="assets/app-icons/icon-192.png">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="styles.css?v=20260624-9">
   </head>
   <body>
     <div id="app" class="app-shell">
@@ -59,17 +59,16 @@
 
         <section id="trip-view" class="trip-view hidden">
           <div id="trip-hero" class="trip-hero"></div>
+          <section id="overview" class="content-section"></section>
           <div id="trip-calendar" class="trip-calendar"></div>
 
           <nav class="section-tabs" aria-label="Trip sections">
-            <button class="tab-button active" type="button" data-section="overview">總覽</button>
-            <button class="tab-button" type="button" data-section="days">每日行程</button>
+            <button class="tab-button active" type="button" data-section="days">每日行程</button>
             <button class="tab-button" type="button" data-section="bookings">票券住宿</button>
             <button class="tab-button" type="button" data-section="record">紀錄書</button>
             <button class="tab-button" type="button" data-section="pending">待確認</button>
           </nav>
 
-          <section id="overview" class="content-section"></section>
           <section id="days" class="content-section"></section>
           <section id="bookings" class="content-section"></section>
           <section id="record" class="content-section"></section>
@@ -78,6 +77,6 @@
       </main>
     </div>
 
-    <script src="script.js"></script>
+    <script src="script.js?v=20260624-9"></script>
   </body>
 </html>
