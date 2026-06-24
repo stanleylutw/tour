@@ -1,4 +1,4 @@
-# 2026 NY Itinerary 附件整理 v3.34
+# 2026 NY Itinerary 附件整理 v3.46
 
 ## 本次整理範圍
 
@@ -24,6 +24,7 @@
 | PWA app icons | `assets/app-icons/` | 使用 family logo 產生 iOS / Android 加入主畫面的 app icon |
 | PWA manifest | `manifest.webmanifest` | 加入主畫面的 app 名稱、icon、theme color 與 standalone 設定 |
 | HTML icons | `assets/icons/` | 2026 NY itinerary SVG icons，11 個 trip essentials icons |
+| Calendar icons | `assets/icons/calendar/` | 月曆小格用簡化 line SVG icons，9 個交通 / 活動圖示 |
 | HTML plan | `notes/html_itinerary_plan.md` | Family Trip Portal HTML 中文實作規劃 |
 | HTML QA | `notes/first_edition_checklist.md` | 第一版 itinerary 資料完整度與待補項目檢查 |
 | HTML app | `index.html` | Family Trip Portal 第一版本機入口 |
@@ -91,6 +92,18 @@
 - Calendar icon size tuning：月曆 / 行程列 icon 尺寸由 `29px` 調整為 `25px`。
 - Topbar and overview refinement：topbar 旅程標題改為填滿中間可用空間；overview summary 移除 card border、白底與陰影。
 - Topbar title refinement：topbar 旅程標題移除按鈕邊框與白底，只保留文字。
+- Month calendar width alignment：移除 month calendar 容器左右 padding，讓月曆格與 day summary card 寬度對齊標準 day card。
+- Month calendar active color：月曆模式選取日期改為淡黃色背景，避免已確認日期仍顯示淡綠色而不易辨識。
+- Month calendar muted date size：月曆模式 unavailable day 日期也套用 `.calendar-date`，讓文字大小與 available day 一致。
+- Row calendar active color：行程列 selected day 改為與月曆一致的淡黃色背景與黃色邊框。
+- Calendar mini icons：新增 9 個月曆小格用 line SVG icons：airplane、boat、bus、train、bike、baseball、walk、beach、food。
+- Calendar mini icon refinement：重畫 airplane、walk、food 三個月曆小圖示，預覽移除文字標籤。
+- Calendar Lucide-style icons：9 個月曆小圖示統一調整為 Lucide-style：24x24、圓角線條、`stroke-width=2`、簡潔輪廓。
+- Calendar Tabler icons：9 個月曆小圖示改用 Tabler Icons 官方 SVG，維持 MIT license、24x24、2px stroke 與一致 icon language。
+- Month calendar mini icons：`data/trips/2026-ny.json` 每日資料新增 `calendarIcon`；month calendar 日期格在日期下方顯示 16px Tabler 小圖示，no-plan 紐約大都會區日期不顯示 icon。
+- Login default calendar mode：登入 / 重新進入 app 時預設顯示 month calendar，避免上次行程列模式殘留。
+- Attachment preview modal：附件與照片改為 app 內 modal 預覽，提供明確關閉按鈕，避免 iOS Home Screen app 開啟圖片 / PDF 後無法返回。
+- Login vertical position：登入卡片改為偏上視覺置中，改善 iOS / mobile 畫面中卡片偏低的感覺。
 
 ## 行程重點整理
 

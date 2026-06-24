@@ -51,12 +51,25 @@ const iconMap = {
   "map-pin": "assets/icons/map-pin.svg"
 };
 
+const calendarIconMap = {
+  airplane: "assets/icons/calendar/airplane.svg",
+  boat: "assets/icons/calendar/boat.svg",
+  bus: "assets/icons/calendar/bus.svg",
+  train: "assets/icons/calendar/train.svg",
+  bike: "assets/icons/calendar/bike.svg",
+  baseball: "assets/icons/calendar/baseball.svg",
+  walk: "assets/icons/calendar/walk.svg",
+  beach: "assets/icons/calendar/beach.svg",
+  food: "assets/icons/calendar/food.svg"
+};
+
 document.addEventListener("DOMContentLoaded", init);
 
 async function init() {
   bindLogin();
   bindTopbar();
   bindTabs();
+  bindAttachmentModal();
   state.db = await openPhotoDb();
   if (localStorage.getItem(AUTH_KEY) === "ok") {
     await enterApp();
@@ -112,9 +125,65 @@ function bindTabs() {
   });
 }
 
+function bindAttachmentModal() {
+  document.addEventListener("click", (event) => {
+    const sourceButton = event.target.closest("[data-preview-source]");
+    if (sourceButton) {
+      openAttachmentPreview(sourceButton.dataset.previewSource, sourceButton.textContent.trim() || "附件預覽");
+      return;
+    }
+    const image = event.target.closest("[data-preview-image]");
+    if (image) {
+      openAttachmentPreview(image.dataset.previewImage, image.dataset.previewTitle || image.alt || "照片預覽");
+    }
+  });
+
+  document.querySelector("#attachment-close").addEventListener("click", closeAttachmentPreview);
+  document.querySelector("#attachment-modal").addEventListener("click", (event) => {
+    if (event.target.id === "attachment-modal") closeAttachmentPreview();
+  });
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") closeAttachmentPreview();
+  });
+}
+
+function openAttachmentPreview(source, title = "附件預覽") {
+  if (!source) return;
+  const modal = document.querySelector("#attachment-modal");
+  const titleEl = document.querySelector("#attachment-title");
+  const body = document.querySelector("#attachment-body");
+  const lower = source.split("?")[0].toLowerCase();
+
+  titleEl.textContent = title;
+  if (/\.(png|jpe?g|gif|webp|svg)$/i.test(lower) || source.startsWith("data:image/")) {
+    body.innerHTML = `<img src="${escapeAttr(source)}" alt="${escapeAttr(title)}">`;
+  } else if (/\.pdf$/i.test(lower)) {
+    body.innerHTML = `<iframe src="${escapeAttr(source)}" title="${escapeAttr(title)}"></iframe>`;
+  } else {
+    body.innerHTML = `
+      <div class="attachment-fallback">
+        <a class="source-link" href="${escapeAttr(source)}" target="_blank" rel="noopener noreferrer">開啟附件</a>
+      </div>
+    `;
+  }
+
+  modal.hidden = false;
+  document.body.classList.add("modal-open");
+  document.querySelector("#attachment-close").focus();
+}
+
+function closeAttachmentPreview() {
+  const modal = document.querySelector("#attachment-modal");
+  if (!modal || modal.hidden) return;
+  modal.hidden = true;
+  document.querySelector("#attachment-body").innerHTML = "";
+  document.body.classList.remove("modal-open");
+}
+
 async function enterApp() {
   document.querySelector("#login-screen").classList.add("hidden");
   document.querySelector("#main-app").classList.remove("hidden");
+  localStorage.setItem(CALENDAR_MODE_KEY, "month");
   state.trips = await loadTrips();
   state.nearestTripId = chooseNearestTrip(state.trips)?.id;
   const pinnedTrip = localStorage.getItem(PINNED_TRIP_KEY);
@@ -334,7 +403,7 @@ function stickyHeaderOffset() {
 }
 
 function currentCalendarMode() {
-  return localStorage.getItem(CALENDAR_MODE_KEY) || "strip";
+  return localStorage.getItem(CALENDAR_MODE_KEY) || "month";
 }
 
 function updateCalendarModeButton(calendarMode) {
@@ -405,14 +474,21 @@ function monthCalendarTemplate(days, activeDayId) {
 
 function calendarCellTemplate(date, day, activeDayId) {
   if (!day) {
-    return `<div class="calendar-cell muted"><span>${date.getMonth() + 1}/${date.getDate()}</span></div>`;
+    return `<div class="calendar-cell muted"><span class="calendar-date">${date.getMonth() + 1}/${date.getDate()}</span></div>`;
   }
   const confirmationClass = isCalendarConfirmedStatus(day.status) ? "confirmed" : "unconfirmed";
   return `
     <button class="calendar-cell has-trip ${confirmationClass} ${day.id === activeDayId ? "active" : ""}" type="button" data-jump-day="${day.id}" aria-label="跳到 Day ${day.day}">
       <span class="calendar-date">${date.getMonth() + 1}/${date.getDate()}</span>
+      ${calendarMiniIcon(day)}
     </button>
   `;
+}
+
+function calendarMiniIcon(day) {
+  const icon = calendarIconMap[day.calendarIcon];
+  if (!icon) return "";
+  return `<img class="calendar-mini-icon" src="${escapeAttr(icon)}" alt="">`;
 }
 
 function monthDaySummaryTemplate(day) {
@@ -718,7 +794,7 @@ function sourceLinks(sources = []) {
   if (!sources.length) return "";
   return `
     <div class="source-links">
-      ${sources.map((source, index) => `<a class="source-link" href="${escapeAttr(source)}" target="_blank" rel="noreferrer">附件 ${index + 1}</a>`).join("")}
+      ${sources.map((source, index) => `<button class="source-link" type="button" data-preview-source="${escapeAttr(source)}">附件 ${index + 1}</button>`).join("")}
     </div>
   `;
 }
@@ -769,7 +845,7 @@ function renderBookings(trip) {
               </div>
             </div>
           </div>
-          ${booking.source ? `<div class="source-links"><a class="source-link" href="${escapeAttr(booking.source)}" target="_blank" rel="noreferrer">查看來源</a></div>` : ""}
+          ${booking.source ? `<div class="source-links"><button class="source-link" type="button" data-preview-source="${escapeAttr(booking.source)}">查看來源</button></div>` : ""}
         </article>
       `).join("")}
     </div>
@@ -815,7 +891,7 @@ function recordDayTemplate(item) {
       <p class="eyebrow">Day ${item.day.day} · ${formatDate(item.day.date)}</p>
       <h3>${escapeHtml(item.day.city)}</h3>
       <p>${escapeHtml(item.record.note || item.day.highlights)}</p>
-      ${item.photos.length ? `<div class="record-photo-grid">${item.photos.map((photo) => `<div class="photo-thumb"><img src="${photo.url}" alt="Day ${item.day.day} photo"></div>`).join("")}</div>` : ""}
+      ${item.photos.length ? `<div class="record-photo-grid">${item.photos.map((photo) => `<div class="photo-thumb"><img src="${photo.url}" alt="Day ${item.day.day} photo" data-preview-image="${photo.url}" data-preview-title="Day ${item.day.day} photo"></div>`).join("")}</div>` : ""}
     </article>
   `;
 }
@@ -915,7 +991,7 @@ async function renderPhotoStrip(tripId, dayId, container) {
   }
   container.innerHTML = photos.map((photo) => `
     <div class="photo-thumb">
-      <img src="${photo.url}" alt="${escapeAttr(photo.name)}">
+      <img src="${photo.url}" alt="${escapeAttr(photo.name)}" data-preview-image="${photo.url}" data-preview-title="${escapeAttr(photo.name)}">
       <button type="button" data-delete-photo="${photo.id}" aria-label="刪除照片">×</button>
     </div>
   `).join("");
