@@ -1,4 +1,4 @@
-# 2026 NY Itinerary 附件整理 v3.31
+# 2026 NY Itinerary 附件整理 v3.34
 
 ## 本次整理範圍
 
@@ -88,6 +88,9 @@
 - Day text refinement：Day 12 抵達美國東岸描述由 `NY 的家人會合` 調整為 `NY 的友人會合`。
 - Calendar mode icons：topbar 月曆 / 行程列切換改為自製 inline SVG；月曆使用格狀 calendar icon，行程列使用水平 day card icon。
 - Calendar icon refinement：行程列 icon 簡化為水平列表樣式，月曆 / 行程列 icon 尺寸放大約 26%，更貼合 topbar button。
+- Calendar icon size tuning：月曆 / 行程列 icon 尺寸由 `29px` 調整為 `25px`。
+- Topbar and overview refinement：topbar 旅程標題改為填滿中間可用空間；overview summary 移除 card border、白底與陰影。
+- Topbar title refinement：topbar 旅程標題移除按鈕邊框與白底，只保留文字。
 
 ## 行程重點整理
 
