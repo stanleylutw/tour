@@ -1,4 +1,4 @@
-# 2026 NY Itinerary 附件整理 v3.54
+# 2026 NY Itinerary 附件整理 v3.59
 
 ## 本次整理範圍
 
@@ -114,6 +114,10 @@
 - Typography refinement：統一 summary、daily detail、booking、pending、record、附件與上傳控制的字級、字重與行距，讓同類 section 在 NY / Osaka 旅程頁中使用一致的閱讀節奏。
 - Day status badge：每日 Day card 左側 badge 合併 day number 與狀態文字，移除標題列右側 status pill，讓日期編號與狀態使用同一個掃讀區塊。
 - Summary status badge：month calendar summary card 左側改用與每日 Day card 相同的 day number + status badge，讓 summary 與 detail 使用同一套狀態視覺邏輯。
+- Month summary focus：month calendar mode 只顯示月曆與大型 summary card，隱藏每日詳細 Day cards；使用者往下滑到 banner 離開畫面切換 row calendar 後，再顯示每日詳細卡。
+- Desktop layout refinement：桌機 detail grid 回到單欄，讓每日卡片維持垂直閱讀節奏，避免行程資訊被左右切散。
+- Desktop full-width refinement：桌機旅程內頁改為接近 full screen 的置中寬度，最大約 1440px 並保留左右安全邊距，banner、calendar 與 summary 可使用更多水平空間。
+- Desktop month layout：桌機 month mode 改為左欄 banner + month calendar、右欄 summary card，summary card 高度對齊左欄 banner/calendar 區塊；手機維持 banner、calendar、summary 上下排列。
 
 ## 行程重點整理
 

@@ -428,7 +428,10 @@ function setCalendarMode(trip, calendarMode, options = {}) {
 
 function updateCalendarModeButton(calendarMode) {
   const button = document.querySelector("#calendar-mode-button");
+  const tripView = document.querySelector("#trip-view");
   const nextLabel = calendarMode === "month" ? "目前為月曆模式" : "目前為行程列模式，點擊返回頁首";
+  tripView?.classList.toggle("calendar-month-mode", calendarMode === "month");
+  tripView?.classList.toggle("calendar-strip-mode", calendarMode === "strip");
   button.querySelector("span[aria-hidden='true']").innerHTML = calendarMode === "month" ? monthCalendarIcon() : rowCalendarIcon();
   button.setAttribute("aria-label", nextLabel);
   button.setAttribute("title", nextLabel);
@@ -533,12 +536,14 @@ function monthDaySummaryTemplate(day) {
   return `
     <button class="month-day-summary" type="button" data-open-day-summary="${day.id}" aria-label="打開 Day ${day.day} 完整行程">
       ${dayStatusBadge(day)}
-      <span class="month-day-summary-content">
+      <span class="month-day-summary-header">
         <span class="month-day-summary-kicker">Day ${day.day} · ${formatDate(day.date)}（${day.weekday}）</span>
         <strong>${escapeHtml(day.city)}</strong>
-        ${detailLines.map((line) => `<span>${escapeHtml(line)}</span>`).join("")}
       </span>
       <span class="month-day-more" aria-hidden="true">›</span>
+      <span class="month-day-summary-details">
+        ${detailLines.map((line) => `<span>${escapeHtml(line)}</span>`).join("")}
+      </span>
     </button>
   `;
 }
