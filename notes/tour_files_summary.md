@@ -1,4 +1,4 @@
-# 2026 NY Itinerary 附件整理 v3.66
+# 2026 NY Itinerary 附件整理 v3.68
 
 ## 本次整理範圍
 
@@ -127,6 +127,8 @@
 - Busan DOCX deep scan：從 `PUS05JX260718RA.docx` 補齊釜山 itinerary 的每日餐食、活動細節、候選飯店、團費 / 訂金 / 簽證 / 稅金資訊、旅行社聯絡方式、護照效期、e-ArrivalCard、小費、環保備品與行李提醒。
 - Busan detail formatting：釜山每日 detail page 的 `行程` 改用分號分段，讓每個景點 / 活動在行程區各自成列；month summary card 新增 `summaryLodging` 支援，釜山住宿摘要維持短版 `釜山住宿待確認`。
 - New rule documentation：同步更新 `comm.md`、`notes/new_itinerary_creation_workflow.md`、`notes/html_itinerary_plan.md` 與 `data/trips/_template.json`，補齊首次登入主選單、附件深度掃描、summary lodging、行程分行與 cache version 規則。
+- Busan lodging cache-safe data：釜山每日 `lodging` 改為短版 `釜山住宿待確認`，候選飯店清單集中保留在住宿 booking summary，避免 GitHub Pages / iOS cache 暫時吃到舊 JS 時 summary card 顯示過長住宿文字。
+- Unpin default behavior：取消固定旅程後改為返回 / 停留在所有旅程主選單，不再自動跳回 NY 或最近旅程；同步更新 `script.js?v=20260625-27`。
 
 ## 行程重點整理
 

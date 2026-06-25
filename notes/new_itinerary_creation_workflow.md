@@ -386,6 +386,8 @@ When the user is already authenticated and reopens or refreshes the app, the app
 
 This keeps first-time discovery clear while preserving quick return behavior.
 
+When the user unpins a trip, the app should stay on or return to the main menu / all trips page. Do not automatically open NY or the nearest trip immediately after unpinning.
+
 ## `data/trips.json` Entry Rules
 
 Each new tour must be added to `data/trips.json`.

@@ -309,10 +309,7 @@ function renderTripList() {
   list.querySelectorAll("[data-unpin-trip]").forEach((button) => {
     button.addEventListener("click", () => {
       localStorage.removeItem(PINNED_TRIP_KEY);
-      renderTripList();
-      if (button.dataset.unpinTrip === state.activeTripId) {
-        showTrip(state.nearestTripId || state.trips[0]?.id);
-      }
+      showPortal();
     });
   });
 }

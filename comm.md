@@ -72,6 +72,7 @@ assets/trips/<tour-id>/
 20. 若住宿資訊過長，例如候選飯店清單，`days[].lodging` 保留完整內容給 detail page；同時新增 `days[].summaryLodging` 作為 month summary card 的短版住宿文字，例如 `釜山住宿待確認`。
 21. 若某日有多個景點或活動但沒有可靠時間，`days[].transport` 必須用中文分號 `；` 分隔每個項目，讓 detail page 的「行程」區一項一列顯示。
 22. 只要修改共用 `script.js` 或 `styles.css` 行為，必須同步更新 `index.html` 的 cache query version，避免 iOS / PWA / Safari 顯示舊版資源。
+23. 使用者取消固定旅程後，預設停留或返回「所有旅程」主選單，不可自動跳回 NY 或最近旅程；只有已登入回訪時才使用固定 / 最近旅程自動開啟。
 
 ## Plan Markdown 版本管理規則
 1. 修改主要 plan 文件時，必須同步更新文件版本號。
