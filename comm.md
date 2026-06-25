@@ -64,6 +64,9 @@ assets/trips/<tour-id>/
 12. 若使用者只提供部分資料，Codex 可以先建立 draft tour，缺少內容以 `待確認`、`待規劃` 標示。
 13. 新旅程建立完成後，Codex 需回報新增資料夾、JSON 路徑、已整理附件與待補資訊；除非使用者明確要求，不可自動 commit 或 push。
 14. 當使用者說 `create a new itinerary` 或類似意思時，Codex 必須依照 `notes/new_itinerary_creation_workflow.md` 逐步詢問初始資訊，不可一次要求所有資料，也不可直接複製新的 HTML/CSS/JS。
+15. 旅程頁的 calendar 顯示邏輯由 banner 可見狀態控制：banner 還在畫面中時顯示 month calendar，點日期只更新 day summary；使用者往下滑到 banner 離開畫面後，自動切換為 row calendar，並讓每日詳細 Day card 成為主要閱讀內容；往上滑回頁首、banner 再次可見時，自動回到 month calendar + summary card。
+16. 每日 Day card 的內容順序為「當日重點、行程、住宿、費用」；若某天有明確時間的活動或航班，應在 `days[].schedule[]` 填入 `time`、`title`、`note`，讓「行程」區塊用時間列表顯示；若沒有 `schedule[]`，UI 才使用 `transport` 文字作為 fallback。
+17. Month calendar 必須至少顯示 4 週；如果旅程實際跨 5 週或更多週，則依實際週數顯示。若旅程只落在 1 週內，該旅程週應顯示在第 2 週，第一週保留作為前導空白。
 
 ## Plan Markdown 版本管理規則
 1. 修改主要 plan 文件時，必須同步更新文件版本號。

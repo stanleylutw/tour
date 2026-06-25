@@ -73,6 +73,13 @@
       "icon": "flight",
       "status": "已確認",
       "transport": "CX564 TPE 11:05 -> KIX 14:50",
+      "schedule": [
+        {
+          "time": "11:05",
+          "title": "CX564 TPE -> KIX",
+          "note": "台北桃園 -> 關西國際機場，14:50 抵達"
+        }
+      ],
       "lodging": "Hotel Hokke Club Osaka",
       "highlights": "從台北飛往大阪，抵達關西國際機場後前往市區與飯店。",
       "cost": "機票 TWD 13,694；住宿 US$287.08 / 28,708 miles",
@@ -119,6 +126,13 @@
       "icon": "flight",
       "status": "已確認",
       "transport": "CX565 KIX 16:15 -> TPE 18:15",
+      "schedule": [
+        {
+          "time": "16:15",
+          "title": "CX565 KIX -> TPE",
+          "note": "關西國際機場 -> 台北桃園，18:15 抵達"
+        }
+      ],
       "lodging": "返台",
       "highlights": "退房後前往關西國際機場，搭機返回台北。",
       "cost": "機票已列入來回總額",

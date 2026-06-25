@@ -120,6 +120,18 @@
       "icon": "flight",
       "status": "已確認",
       "transport": "OZ712 TPE 12:25 -> ICN 15:55；OZ224 ICN 21:05 -> JFK 23:00",
+      "schedule": [
+        {
+          "time": "12:25",
+          "title": "OZ712 TPE -> ICN",
+          "note": "台北桃園 -> 首爾仁川，15:55 抵達"
+        },
+        {
+          "time": "21:05",
+          "title": "OZ224 ICN -> JFK",
+          "note": "首爾仁川 -> 紐約 JFK，23:00 抵達"
+        }
+      ],
       "lodging": "1057 Harding Road, Elizabeth, NJ",
       "highlights": "台灣出發 4 人啟程前往美國東岸，抵達後與 NY 的友人會合。",
       "cost": "國際線機票總價 TWD 125,946",

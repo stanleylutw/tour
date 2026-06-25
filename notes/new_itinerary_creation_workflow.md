@@ -1,10 +1,17 @@
-# New Itinerary Creation Workflow v1.0
+# New Itinerary Creation Workflow v1.1
 
-Last updated: 2026-06-24 23:55:00 [Codex]
+Last updated: 2026-06-25 00:00:00 [Codex]
 
 ## Purpose
 
 This document defines how Codex should create a new itinerary in the Family Trip Portal.
+
+## Revision History
+
+| Version | Date Time | Summary | Who |
+|---|---|---|---|
+| v1.1 | 2026-06-25 00:00:00 | Add daily schedule field rules | Codex |
+| v1.0 | 2026-06-24 23:55:00 | Create new itinerary workflow | Codex |
 
 The 2026 NY tour is the standard itinerary template. When the user says:
 
@@ -172,6 +179,18 @@ Ask:
 
 Use the answer to create draft booking entries only when enough detail exists.
 
+If the transportation has reliable departure or activity times, also create `days[].schedule[]` entries:
+
+```json
+{
+  "time": "12:25",
+  "title": "OZ712 TPE -> ICN",
+  "note": "台北桃園 -> 首爾仁川，15:55 抵達"
+}
+```
+
+Daily cards should show these schedule entries in the `行程` section. If reliable times are not available yet, keep the text in `transport` and use `待確認` where needed.
+
 If the user provides screenshots, PDFs, or pasted text, save them under:
 
 ```text
@@ -218,6 +237,7 @@ Use known items to create:
 
 - `bookings`
 - day `highlights`
+- day `schedule` when the activity has a reliable time
 - day `sources`
 - `pendingItems`
 
@@ -310,6 +330,7 @@ If the trip dates are unknown, generate only one draft day:
   "icon": "map-pin",
   "status": "待規劃",
   "transport": "待確認",
+  "schedule": [],
   "lodging": "待確認",
   "highlights": "待規劃",
   "cost": "待確認",

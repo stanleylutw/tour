@@ -1,4 +1,4 @@
-# 2026 NY Itinerary 附件整理 v3.48
+# 2026 NY Itinerary 附件整理 v3.54
 
 ## 本次整理範圍
 
@@ -108,6 +108,12 @@
 - Login vertical position：登入卡片改為偏上視覺置中，改善 iOS / mobile 畫面中卡片偏低的感覺。
 - Pinned trip control：主選單固定旅程功能補齊 `取消固定`，與 `notes/html_itinerary_plan.md` 的 override 設計一致。
 - New tour template rules：將 2026 NY UI 定義為新旅程共用 template，新增 `assets/trips/_template/` 與 `data/trips/_template.json`，未來新 tour 附件需保存到各自 tour folder。
+- Banner-driven calendar：旅程頁 calendar 模式改由 banner 可見狀態控制；banner 可見時顯示 month calendar 與 day summary，點日期只更新 summary；往下滑到 banner 離開畫面後自動切換 row calendar，讓每日詳細 Day card 成為主要閱讀內容；往上回頁首時自動恢復 month calendar + summary card。
+- Daily schedule section：每日 Day card 改為「當日重點、行程、住宿、費用」；`days[].schedule[]` 可填入正確時間、標題與備註，UI 會優先顯示時間列表，沒有 schedule 時才 fallback 顯示原本 `transport` 文字。
+- Month calendar week count：month calendar 至少顯示 4 週；旅程跨 5 週或更多週時依實際週數顯示；若旅程只落在 1 週內，旅程週會顯示在第 2 週，第一週保留前導空白。
+- Typography refinement：統一 summary、daily detail、booking、pending、record、附件與上傳控制的字級、字重與行距，讓同類 section 在 NY / Osaka 旅程頁中使用一致的閱讀節奏。
+- Day status badge：每日 Day card 左側 badge 合併 day number 與狀態文字，移除標題列右側 status pill，讓日期編號與狀態使用同一個掃讀區塊。
+- Summary status badge：month calendar summary card 左側改用與每日 Day card 相同的 day number + status badge，讓 summary 與 detail 使用同一套狀態視覺邏輯。
 
 ## 行程重點整理
 

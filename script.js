@@ -3,7 +3,6 @@ const AUTH_KEY = "trip-portal:auth";
 const PINNED_TRIP_KEY = "trip-portal:pinned-trip-id";
 const DB_NAME = "family-trip-portal";
 const DB_VERSION = 1;
-const CALENDAR_MODE_KEY = "trip-portal:calendar-mode";
 
 const FALLBACK_TRIPS = [
   {
@@ -29,12 +28,13 @@ const state = {
   activeTripId: null,
   nearestTripId: null,
   activeDayId: null,
-  activeSection: "days",
   db: null,
   dayScrollHandler: null,
   dayObserver: null,
   isCalendarJumping: false,
-  calendarJumpTimer: null
+  calendarJumpTimer: null,
+  calendarMode: "month",
+  bannerCalendarScrollHandler: null
 };
 
 const iconMap = {
@@ -68,7 +68,6 @@ document.addEventListener("DOMContentLoaded", init);
 async function init() {
   bindLogin();
   bindTopbar();
-  bindTabs();
   bindAttachmentModal();
   state.db = await openPhotoDb();
   if (localStorage.getItem(AUTH_KEY) === "ok") {
@@ -94,34 +93,15 @@ function bindLogin() {
 
 function bindTopbar() {
   document.querySelector("#menu-button").addEventListener("click", () => showPortal());
-  document.querySelector("#current-trip-button").addEventListener("click", async () => {
-    await showTrip(state.nearestTripId || state.activeTripId);
-  });
   document.querySelector("#calendar-mode-button").addEventListener("click", () => {
-    const trip = state.tripDetails.get(state.activeTripId);
-    if (!trip) return;
-    const nextMode = currentCalendarMode() === "month" ? "strip" : "month";
-    localStorage.setItem(CALENDAR_MODE_KEY, nextMode);
-    renderTripCalendar(trip);
-    updateCalendarModeButton(nextMode);
-    setActiveDay(state.activeDayId || chooseInitialDay(trip).id, { center: true });
-    if (nextMode === "month") scrollToTripInitialView();
+    if (currentCalendarMode() === "strip") {
+      scrollToTripInitialView();
+    }
   });
   document.querySelector("#logout-button").addEventListener("click", () => {
     localStorage.removeItem(AUTH_KEY);
     document.querySelector("#main-app").classList.add("hidden");
     document.querySelector("#login-screen").classList.remove("hidden");
-  });
-}
-
-function bindTabs() {
-  document.querySelectorAll(".tab-button").forEach((button) => {
-    button.addEventListener("click", () => {
-      state.activeSection = button.dataset.section;
-      document.querySelectorAll(".tab-button").forEach((item) => item.classList.remove("active"));
-      button.classList.add("active");
-      document.querySelector(`#${state.activeSection}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
-    });
   });
 }
 
@@ -183,7 +163,6 @@ function closeAttachmentPreview() {
 async function enterApp() {
   document.querySelector("#login-screen").classList.add("hidden");
   document.querySelector("#main-app").classList.remove("hidden");
-  localStorage.setItem(CALENDAR_MODE_KEY, "month");
   state.trips = await loadTrips();
   state.nearestTripId = chooseNearestTrip(state.trips)?.id;
   const pinnedTrip = localStorage.getItem(PINNED_TRIP_KEY);
@@ -249,7 +228,9 @@ function parseDate(value) {
 }
 
 function showPortal() {
+  unbindBannerCalendarMode();
   document.querySelector("#calendar-mode-button").classList.add("hidden");
+  document.querySelector("#current-trip-button").classList.remove("hidden");
   updateTopbarTripTitle("旅遊日誌");
   document.querySelector("#trip-view").classList.add("hidden");
   document.querySelector("#portal-view").classList.remove("hidden");
@@ -263,6 +244,8 @@ async function showTrip(tripId) {
   const detail = await loadTripDetail(trip);
   const todayDay = findTodayDay(detail);
   state.activeDayId = (todayDay || chooseInitialDay(detail)).id;
+  state.calendarMode = "month";
+  document.querySelector("#current-trip-button").classList.remove("hidden");
   updateTopbarTripTitle(detail.title);
   updateCalendarModeButton(currentCalendarMode());
   document.querySelector("#calendar-mode-button").classList.remove("hidden");
@@ -272,6 +255,7 @@ async function showTrip(tripId) {
   renderTripCalendar(detail);
   await renderTripSections(detail);
   bindDayScrollSpy(detail.days);
+  bindBannerCalendarMode(detail);
   setActiveDay(state.activeDayId, { center: true });
   if (todayDay) {
     window.setTimeout(() => {
@@ -290,7 +274,6 @@ function renderTripList() {
   const list = document.querySelector("#trip-list");
   const pinnedTripId = localStorage.getItem(PINNED_TRIP_KEY);
   list.innerHTML = state.trips.map((trip) => {
-    const status = tripStatus(trip);
     const isPinned = trip.id === pinnedTripId;
     return `
       <article class="trip-card">
@@ -299,12 +282,6 @@ function renderTripList() {
           <p class="eyebrow">${trip.destination}</p>
           <h2>${escapeHtml(trip.title)}</h2>
           <p>${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}</p>
-          <div class="trip-meta">
-            <span class="chip">${escapeHtml(trip.peopleNote || `${trip.people} 人`)}</span>
-            <span class="chip">${status}</span>
-            ${trip.id === state.nearestTripId ? '<span class="chip">目前旅程</span>' : ""}
-            ${isPinned ? '<span class="chip">已固定</span>' : ""}
-          </div>
           <div class="hero-actions">
             <button class="primary-button" type="button" data-open-trip="${trip.id}">打開旅程</button>
             ${isPinned
@@ -338,8 +315,30 @@ function renderTripList() {
 
 function renderTripHero(trip) {
   document.querySelector("#trip-hero").innerHTML = `
-    <div class="hero-image" style="background-image: url('${escapeAttr(trip.banner)}')" aria-label="${escapeAttr(trip.title)}"></div>
+    <button
+      class="hero-image hero-info-toggle"
+      type="button"
+      style="background-image: url('${escapeAttr(trip.banner)}')"
+      aria-label="展開旅程資訊"
+      aria-expanded="false"
+      aria-controls="overview"
+    >
+      <span class="hero-info-chip">資訊</span>
+    </button>
   `;
+  document.querySelector(".hero-info-toggle").addEventListener("click", toggleTripInfo);
+}
+
+function toggleTripInfo() {
+  const overview = document.querySelector("#overview");
+  const button = document.querySelector(".hero-info-toggle");
+  const chip = button?.querySelector(".hero-info-chip");
+  if (!overview || !button || !chip) return;
+  const nextExpanded = overview.hidden;
+  overview.hidden = !nextExpanded;
+  button.setAttribute("aria-expanded", String(nextExpanded));
+  button.setAttribute("aria-label", nextExpanded ? "收合旅程資訊" : "展開旅程資訊");
+  chip.textContent = nextExpanded ? "收合" : "資訊";
 }
 
 function renderTripCalendar(trip) {
@@ -373,9 +372,7 @@ function jumpToDayFromCalendar(trip, dayId, calendarMode) {
 }
 
 function openDayFromMonthSummary(trip, dayId) {
-  localStorage.setItem(CALENDAR_MODE_KEY, "strip");
-  renderTripCalendar(trip);
-  updateCalendarModeButton("strip");
+  setCalendarMode(trip, "strip", { center: false });
   openDayFromCalendar(dayId, "month");
 }
 
@@ -418,13 +415,21 @@ function stickyHeaderOffset() {
 }
 
 function currentCalendarMode() {
-  return localStorage.getItem(CALENDAR_MODE_KEY) || "month";
+  return state.calendarMode || "month";
+}
+
+function setCalendarMode(trip, calendarMode, options = {}) {
+  if (!trip || state.calendarMode === calendarMode) return;
+  state.calendarMode = calendarMode;
+  renderTripCalendar(trip);
+  updateCalendarModeButton(calendarMode);
+  setActiveDay(state.activeDayId || chooseInitialDay(trip).id, { center: options.center !== false });
 }
 
 function updateCalendarModeButton(calendarMode) {
   const button = document.querySelector("#calendar-mode-button");
-  const nextLabel = calendarMode === "month" ? "切換到行程列模式" : "切換到月曆模式";
-  button.querySelector("span[aria-hidden='true']").innerHTML = calendarMode === "month" ? rowCalendarIcon() : monthCalendarIcon();
+  const nextLabel = calendarMode === "month" ? "目前為月曆模式" : "目前為行程列模式，點擊返回頁首";
+  button.querySelector("span[aria-hidden='true']").innerHTML = calendarMode === "month" ? monthCalendarIcon() : rowCalendarIcon();
   button.setAttribute("aria-label", nextLabel);
   button.setAttribute("title", nextLabel);
 }
@@ -465,10 +470,9 @@ function monthCalendarTemplate(days, activeDayId) {
   const dayByDate = new Map(days.map((day) => [day.date, day]));
   const firstDate = parseDate(days[0].date);
   const lastDate = parseDate(days[days.length - 1].date);
-  const cursor = new Date(firstDate);
-  cursor.setDate(cursor.getDate() - cursor.getDay());
-  const end = new Date(lastDate);
-  end.setDate(end.getDate() + (6 - end.getDay()));
+  const range = monthCalendarDateRange(firstDate, lastDate);
+  const cursor = new Date(range.start);
+  const end = new Date(range.end);
   const cells = [];
   while (cursor <= end) {
     const iso = toIsoDate(cursor);
@@ -485,6 +489,24 @@ function monthCalendarTemplate(days, activeDayId) {
     </div>
     ${monthDaySummaryTemplate(days.find((day) => day.id === activeDayId) || days[0])}
   `;
+}
+
+function monthCalendarDateRange(firstDate, lastDate) {
+  const tripStartWeek = startOfWeek(firstDate);
+  const tripEndWeek = startOfWeek(lastDate);
+  const tripWeekCount = Math.round((tripEndWeek - tripStartWeek) / 604800000) + 1;
+  const displayWeekCount = Math.max(4, tripWeekCount);
+  const displayStart = new Date(tripStartWeek);
+  if (tripWeekCount === 1) displayStart.setDate(displayStart.getDate() - 7);
+  const displayEnd = new Date(displayStart);
+  displayEnd.setDate(displayEnd.getDate() + displayWeekCount * 7 - 1);
+  return { start: displayStart, end: displayEnd };
+}
+
+function startOfWeek(date) {
+  const result = new Date(date);
+  result.setDate(result.getDate() - result.getDay());
+  return result;
 }
 
 function calendarCellTemplate(date, day, activeDayId) {
@@ -510,12 +532,11 @@ function monthDaySummaryTemplate(day) {
   const detailLines = monthDaySummaryDetails(day);
   return `
     <button class="month-day-summary" type="button" data-open-day-summary="${day.id}" aria-label="打開 Day ${day.day} 完整行程">
-      <span class="day-icon small"><img src="${iconMap[day.icon] || iconMap["map-pin"]}" alt=""></span>
+      ${dayStatusBadge(day)}
       <span class="month-day-summary-content">
         <span class="month-day-summary-kicker">Day ${day.day} · ${formatDate(day.date)}（${day.weekday}）</span>
         <strong>${escapeHtml(day.city)}</strong>
-        <span>${escapeHtml(detailLines[0])}</span>
-        <span>${escapeHtml(detailLines[1])}</span>
+        ${detailLines.map((line) => `<span>${escapeHtml(line)}</span>`).join("")}
       </span>
       <span class="month-day-more" aria-hidden="true">›</span>
     </button>
@@ -523,9 +544,27 @@ function monthDaySummaryTemplate(day) {
 }
 
 function monthDaySummaryDetails(day) {
-  const lines = [day.highlights, day.transport, day.lodging, day.cost].filter(Boolean);
-  while (lines.length < 2) lines.push("查看當日完整行程");
-  return lines.slice(0, 2);
+  const lines = [
+    day.highlights,
+    monthSummaryScheduleText(day),
+    day.lodging ? `住宿：${day.lodging}` : "",
+    day.cost ? `費用：${day.cost}` : ""
+  ].filter(Boolean);
+  while (lines.length < 4) lines.push("查看當日完整行程");
+  return lines.slice(0, 4);
+}
+
+function monthSummaryScheduleText(day) {
+  const schedule = Array.isArray(day.schedule) ? day.schedule.filter((item) => item.time || item.title) : [];
+  if (schedule.length) {
+    const first = schedule[0];
+    return `行程：${[first.time, first.title].filter(Boolean).join(" ")}`;
+  }
+  return day.transport ? `行程：${day.transport}` : "";
+}
+
+function dayNumberClass(dayNumber) {
+  return `day-number-${((Number(dayNumber) - 1) % 10) + 1}`;
 }
 
 function setActiveDayJump(dayId) {
@@ -559,6 +598,36 @@ function centerDayJump(dayId) {
   const activeButton = document.querySelector(`.day-jump[data-jump-day="${dayId}"]`);
   if (!activeButton) return;
   activeButton.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+}
+
+function bindBannerCalendarMode(trip) {
+  unbindBannerCalendarMode();
+  let ticking = false;
+  state.bannerCalendarScrollHandler = () => {
+    if (state.isCalendarJumping || ticking) return;
+    ticking = true;
+    window.requestAnimationFrame(() => {
+      ticking = false;
+      updateCalendarModeFromBanner(trip);
+    });
+  };
+  window.addEventListener("scroll", state.bannerCalendarScrollHandler, { passive: true });
+  updateCalendarModeFromBanner(trip);
+}
+
+function unbindBannerCalendarMode() {
+  if (!state.bannerCalendarScrollHandler) return;
+  window.removeEventListener("scroll", state.bannerCalendarScrollHandler);
+  state.bannerCalendarScrollHandler = null;
+}
+
+function updateCalendarModeFromBanner(trip) {
+  const hero = document.querySelector("#trip-hero");
+  if (!hero || document.querySelector("#trip-view")?.classList.contains("hidden")) return;
+  const topbarHeight = document.querySelector(".topbar")?.getBoundingClientRect().height || 0;
+  const heroBottom = hero.getBoundingClientRect().bottom;
+  const nextMode = heroBottom > topbarHeight + 8 ? "month" : "strip";
+  setCalendarMode(trip, nextMode, { center: nextMode === "strip" });
 }
 
 function bindDayScrollSpy(days) {
@@ -658,17 +727,10 @@ async function renderTripSections(trip) {
 
 function renderOverview(trip) {
   const status = tripStatus(trip);
+  const overview = document.querySelector("#overview");
+  overview.hidden = true;
   document.querySelector("#overview").innerHTML = `
-    <details class="overview-card trip-summary-card">
-      <summary>
-        <div class="trip-summary-main">
-          <div>
-            <strong>${escapeHtml(trip.title)}</strong>
-            <p>${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}</p>
-          </div>
-        </div>
-        <span class="details-toggle">展開</span>
-      </summary>
+    <div class="overview-card trip-summary-card">
       <div class="overview-full-text">
         <div class="day-icon"><img src="${iconMap["ny-skyline"]}" alt=""></div>
         <div>
@@ -680,7 +742,7 @@ function renderOverview(trip) {
           <p>使用提醒：第一版資料保存在這台裝置的瀏覽器內；更換裝置後不會自動同步。</p>
         </div>
       </div>
-    </details>
+    </div>
   `;
 }
 
@@ -716,12 +778,7 @@ function modeText(trip) {
 
 async function renderDays(trip) {
   const container = document.querySelector("#days");
-  container.innerHTML = `
-    <div class="section-heading">
-      <p class="eyebrow">Timeline</p>
-      <h2>每日行程</h2>
-    </div>
-  `;
+  container.innerHTML = "";
   for (const day of trip.days) {
     const card = document.createElement("article");
     card.className = "day-card";
@@ -736,25 +793,32 @@ async function renderDays(trip) {
 function dayCardTemplate(tripId, day) {
   return `
     <div class="day-card-header">
-      <div class="day-icon">
-        <img src="${iconMap[day.icon] || iconMap["map-pin"]}" alt="">
-      </div>
+      ${dayStatusBadge(day)}
       <div>
         <div class="day-title-row">
-          <h3>Day ${day.day} · ${escapeHtml(day.city)}</h3>
-          ${statusPill(day.status)}
+          <h3>${escapeHtml(day.city)}</h3>
         </div>
         <p class="day-date">${formatDate(day.date)}（${day.weekday}）</p>
       </div>
     </div>
     <div class="detail-grid">
-      ${detailItem("當日重點", day.highlights)}
-      ${detailItem("交通 / 時間", day.transport)}
+      ${detailItem("當日重點", day.highlights, "map-pin")}
+      ${scheduleDetailItem(day)}
       ${lodgingDetailItem(day.lodging)}
-      ${detailItem("費用", day.cost)}
+      ${detailItem("費用", day.cost, "ticket")}
     </div>
     ${sourceLinks(day.sources)}
-    <div class="day-journal">
+    <button
+      class="day-journal-toggle"
+      type="button"
+      data-journal-toggle
+      aria-label="展開旅行紀錄"
+      aria-expanded="false"
+      aria-controls="journal-${tripId}-${day.id}"
+    >
+      <span aria-hidden="true">›</span>
+    </button>
+    <div id="journal-${tripId}-${day.id}" class="day-journal" hidden>
       <textarea class="note-input" data-note="${tripId}:${day.id}" placeholder="寫下今天的心得、提醒或旅行小故事..."></textarea>
       <label class="photo-upload-label">
         上傳照片
@@ -765,20 +829,123 @@ function dayCardTemplate(tripId, day) {
   `;
 }
 
-function detailItem(label, value) {
+function dayStatusBadge(day) {
+  return `
+    <div class="day-status-badge ${dayNumberClass(day.day)} ${statusClass(day.status)}" aria-label="Day ${day.day}，${escapeAttr(day.status)}">
+      <span class="day-status-number">${day.day}</span>
+      <span class="day-status-text">${shortStatusText(day.status)}</span>
+    </div>
+  `;
+}
+
+function shortStatusText(status) {
+  if (status.includes("已確認") || status.includes("已付款") || status.includes("已訂房")) return "已確認";
+  if (status.includes("部分")) return "部分";
+  if (status.includes("待規劃")) return "待規劃";
+  if (status.includes("待")) return "待確認";
+  return status;
+}
+
+function detailItem(label, value, iconKey = "map-pin") {
   return `
     <div class="detail-item">
-      <span class="detail-label">${escapeHtml(label)}</span>
+      ${detailLabel(label, iconKey)}
       <span>${escapeHtml(value || "待確認")}</span>
     </div>
   `;
+}
+
+function detailLabel(label, iconKey) {
+  return `
+    <span class="detail-label">
+      <img src="${iconMap[iconKey] || iconMap["map-pin"]}" alt="">
+      <span>${escapeHtml(label)}</span>
+    </span>
+  `;
+}
+
+function scheduleDetailItem(day) {
+  const schedule = Array.isArray(day.schedule) ? day.schedule.filter((item) => item.title || item.note) : [];
+  return `
+    <div class="detail-item">
+      ${detailLabel("行程", "ticket")}
+      ${schedule.length ? scheduleList(schedule) : transportFallback(day.transport)}
+    </div>
+  `;
+}
+
+function scheduleList(schedule) {
+  return `
+    <div class="schedule-list">
+      ${schedule.map((item) => `
+        <div class="schedule-row">
+          <span class="schedule-time">${escapeHtml(item.time || "待確認")}</span>
+          <span class="schedule-content">
+            <strong>${escapeHtml(item.title || "待確認")}</strong>
+            ${item.note ? `<span>${escapeHtml(item.note)}</span>` : ""}
+          </span>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function transportFallback(value) {
+  const lines = String(value || "待確認").split("；").map((item) => item.trim()).filter(Boolean);
+  return `
+    <div class="schedule-list">
+      ${lines.map((line) => fallbackScheduleRow(line)).join("")}
+    </div>
+  `;
+}
+
+function fallbackScheduleRow(line) {
+  const parsed = parseFallbackScheduleLine(line);
+  if (!parsed.time) {
+    return `
+      <div class="schedule-row schedule-row-simple">
+        <span>${escapeHtml(line)}</span>
+      </div>
+    `;
+  }
+  return `
+    <div class="schedule-row">
+      <span class="schedule-time">${escapeHtml(parsed.time)}</span>
+      <span class="schedule-content">
+        <strong>${escapeHtml(parsed.title)}</strong>
+        ${parsed.note ? `<span>${escapeHtml(parsed.note)}</span>` : ""}
+      </span>
+    </div>
+  `;
+}
+
+function parseFallbackScheduleLine(line) {
+  const flightMatch = line.match(/^(.+?)\s+([A-Z]{3})\s+(\d{1,2}:\d{2})\s*->\s*([A-Z]{3})\s+(\d{1,2}:\d{2})$/);
+  if (flightMatch) {
+    return {
+      time: flightMatch[3],
+      title: `${flightMatch[1]} ${flightMatch[2]} -> ${flightMatch[4]}`,
+      note: `${flightMatch[5]} 抵達`
+    };
+  }
+
+  const leadingTimeMatch = line.match(/^(\d{1,2}:\d{2})(?:\s*[-–]\s*(\d{1,2}:\d{2}))?(?:\s+|：)?(.+)$/);
+  if (leadingTimeMatch) {
+    return {
+      time: leadingTimeMatch[1],
+      title: leadingTimeMatch[3],
+      note: leadingTimeMatch[2] ? `${leadingTimeMatch[2]} 結束` : ""
+    };
+  }
+
+  return { time: "", title: line, note: "" };
 }
 
 function lodgingDetailItem(value) {
   const mapLink = mapLinkForLodging(value);
   return `
     <div class="detail-item">
-      <span class="detail-label">住宿</span>
+      ${detailLabel("住宿", "hotel")}
       <span class="detail-value-row">
         <span>${escapeHtml(value || "待確認")}</span>
         ${mapLink ? `
@@ -821,6 +988,15 @@ function statusPill(status) {
 }
 
 function bindDayCard(tripId, day, card) {
+  const toggle = card.querySelector("[data-journal-toggle]");
+  const journal = card.querySelector(".day-journal");
+  toggle.addEventListener("click", () => {
+    const nextExpanded = journal.hidden;
+    journal.hidden = !nextExpanded;
+    toggle.classList.toggle("active", nextExpanded);
+    toggle.setAttribute("aria-expanded", String(nextExpanded));
+    toggle.setAttribute("aria-label", nextExpanded ? "收起旅行紀錄" : "展開旅行紀錄");
+  });
   const note = card.querySelector("[data-note]");
   note.addEventListener("input", () => saveDayRecord(tripId, day.id, { note: note.value }));
   const input = card.querySelector("[data-photo-input]");
