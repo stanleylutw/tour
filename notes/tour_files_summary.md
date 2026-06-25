@@ -1,4 +1,4 @@
-# 2026 NY Itinerary 附件整理 v3.59
+# 2026 NY Itinerary 附件整理 v3.61
 
 ## 本次整理範圍
 
@@ -118,6 +118,8 @@
 - Desktop layout refinement：桌機 detail grid 回到單欄，讓每日卡片維持垂直閱讀節奏，避免行程資訊被左右切散。
 - Desktop full-width refinement：桌機旅程內頁改為接近 full screen 的置中寬度，最大約 1440px 並保留左右安全邊距，banner、calendar 與 summary 可使用更多水平空間。
 - Desktop month layout：桌機 month mode 改為左欄 banner + month calendar、右欄 summary card，summary card 高度對齊左欄 banner/calendar 區塊；手機維持 banner、calendar、summary 上下排列。
+- Mobile summary fit：手機 month mode 的 summary card 使用 dynamic viewport height 計算剩餘首屏空間，讓 summary 盡量填滿 banner 與 month calendar 下方的可視區域。
+- Mobile landscape layout：手機橫放且寬度足夠時套用 desktop-style month layout，左欄顯示 banner + calendar，右欄顯示 summary card；手機直式仍維持上下排列。
 
 ## 行程重點整理
 

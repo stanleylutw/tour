@@ -635,18 +635,15 @@ a:hover {
 .month-day-summary-details {
   grid-column: 1 / -1;
   display: grid;
-  gap: 8px;
+  gap: 12px;
   min-width: 0;
 }
 
 .month-day-summary-details span {
-  padding: 9px 10px;
-  border-radius: 8px;
-  background: #fbfdff;
   color: var(--muted);
-  font-size: var(--text-meta-size);
-  font-weight: 700;
-  line-height: 1.32;
+  font-size: var(--text-body-size);
+  font-weight: 500;
+  line-height: 1.4;
 }
 
 .month-day-more {
@@ -664,6 +661,12 @@ a:hover {
 
 .calendar-month-mode #days {
   display: none;
+}
+
+@media (max-width: 1039px) {
+  .calendar-month-mode .month-day-summary {
+    min-height: max(260px, calc(100dvh - 61px - (100vw - 28px) / (16 / 6) - 330px));
+  }
 }
 
 .content-section {
@@ -1328,7 +1331,7 @@ button.source-link {
   }
 }
 
-@media (min-width: 1040px) {
+@media (min-width: 1040px), (orientation: landscape) and (min-width: 700px) and (max-height: 600px) {
   .trip-view {
     max-width: min(1440px, calc(100vw - 48px));
   }
