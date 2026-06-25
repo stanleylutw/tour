@@ -1,4 +1,4 @@
-# 2026 NY Itinerary 附件整理 v3.61
+# 2026 NY Itinerary 附件整理 v3.66
 
 ## 本次整理範圍
 
@@ -34,6 +34,8 @@
 | JSON data | `data/trips/2026-ny.json` | 2026 NY 第一個旅程資料 |
 | Tour template | `assets/trips/_template/` | 新旅程素材資料夾範本 |
 | JSON template | `data/trips/_template.json` | 新旅程 JSON 結構範本 |
+| Busan tour | `data/trips/2026-busan.json` | 2026 暑假我們在釜山 itinerary 初版資料 |
+| Busan assets | `assets/trips/2026-busan/` | 釜山 banner、旅行社 DOCX 與後續附件資料夾 |
 
 ## HTML 開發素材
 
@@ -120,6 +122,11 @@
 - Desktop month layout：桌機 month mode 改為左欄 banner + month calendar、右欄 summary card，summary card 高度對齊左欄 banner/calendar 區塊；手機維持 banner、calendar、summary 上下排列。
 - Mobile summary fit：手機 month mode 的 summary card 使用 dynamic viewport height 計算剩餘首屏空間，讓 summary 盡量填滿 banner 與 month calendar 下方的可視區域。
 - Mobile landscape layout：手機橫放且寬度足夠時套用 desktop-style month layout，左欄顯示 banner + calendar，右欄顯示 summary card；手機直式仍維持上下排列。
+- Busan itinerary draft：新增 `2026-busan` 旅程，使用使用者提供的釜山 banner 與 `PUS05JX260718RA.docx` 建立 5 天初版 itinerary；人數為 1 成人 + 2 位小孩佔床，團費合計 NT$98,700，正式住宿飯店與 GPS 地址待確認。
+- First login default page：使用者輸入 passcode 成功登入時，預設先顯示所有旅程主選單；已登入狀態重新開啟 app 時仍保留原本固定旅程 / 最近旅程自動開啟邏輯。
+- Busan DOCX deep scan：從 `PUS05JX260718RA.docx` 補齊釜山 itinerary 的每日餐食、活動細節、候選飯店、團費 / 訂金 / 簽證 / 稅金資訊、旅行社聯絡方式、護照效期、e-ArrivalCard、小費、環保備品與行李提醒。
+- Busan detail formatting：釜山每日 detail page 的 `行程` 改用分號分段，讓每個景點 / 活動在行程區各自成列；month summary card 新增 `summaryLodging` 支援，釜山住宿摘要維持短版 `釜山住宿待確認`。
+- New rule documentation：同步更新 `comm.md`、`notes/new_itinerary_creation_workflow.md`、`notes/html_itinerary_plan.md` 與 `data/trips/_template.json`，補齊首次登入主選單、附件深度掃描、summary lodging、行程分行與 cache version 規則。
 
 ## 行程重點整理
 

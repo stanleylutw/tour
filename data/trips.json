@@ -14,6 +14,20 @@
     "data": "data/trips/2026-ny.json"
   },
   {
+    "id": "2026-busan",
+    "title": "2026 暑假我們在釜山",
+    "subtitle": "Taipei to Busan family summer trip",
+    "destination": "Busan, Korea",
+    "startDate": "2026-07-18",
+    "endDate": "2026-07-22",
+    "people": 3,
+    "peopleNote": "1 成人 + 2 位小孩佔床",
+    "status": "draft",
+    "banner": "assets/trips/2026-busan/images/banner.png",
+    "logo": "",
+    "data": "data/trips/2026-busan.json"
+  },
+  {
     "id": "2026-osaka",
     "title": "2026 暑遊大阪",
     "subtitle": "Taipei to Osaka summer trip",

@@ -1,11 +1,12 @@
-# Family Trip Portal HTML 規劃 v1.1
+# Family Trip Portal HTML 規劃 v1.2
 
-Last updated: 2026-06-24 23:43:20 [Codex]
+Last updated: 2026-06-25 23:25:00 [Codex]
 
 ## Revision History
 
 | Version | Date Time | Summary | Who |
 |---|---|---|---|
+| v1.2 | 2026-06-25 23:25:00 | 補充首次登入主選單、summary 住宿短版與行程分行規則 | Codex |
 | v1.1 | 2026-06-24 23:43:20 | 新增 NY UI template 與新旅程資料夾規則 | Codex |
 | v1.0 | 2026-06-24 00:00:00 | 建立 Family Trip Portal 第一版 HTML 規劃 | Codex |
 
@@ -13,7 +14,7 @@ Last updated: 2026-06-24 23:43:20 [Codex]
 
 本專案不是單一的 NY itinerary 頁面，而是 **Family Trip Portal 家庭旅行入口網站**。
 
-2026 NY itinerary 是第一個旅程，未來可繼續加入日本、歐洲、郵輪、迪士尼等其他行程。首頁會自動判斷目前日期，直接進入最接近或正在進行中的旅程；使用者也可以回到主選單查看所有旅程。
+2026 NY itinerary 是第一個旅程，未來可繼續加入日本、歐洲、郵輪、迪士尼等其他行程。使用者第一次輸入 passcode 登入時，預設先進入主選單查看所有旅程；已登入後重新開啟或重新整理時，首頁可自動判斷目前日期，直接進入固定旅程、最接近或正在進行中的旅程。
 
 ## 第一版目標
 
@@ -77,6 +78,9 @@ attachments/
 - 新旅程只新增資料與素材：`data/trips/<tour-id>.json`、`assets/trips/<tour-id>/...`。
 - 新旅程必須更新 `data/trips.json`，讓首頁可以自動選擇最近或進行中的旅程。
 - 新旅程的 UI 應沿用目前 NY tour 的格式：login、main menu、banner、overview、month calendar、row calendar、daily cards、bookings、record book、pending checklist、附件預覽 modal。
+- 若使用者提供 DOCX、PDF、截圖或訂單資料，需深度掃描並把可顯示於 HTML 的資訊寫入 JSON，例如每日活動、餐食、候選飯店、費用、旅行社聯絡、入境提醒、行李與小費提醒。
+- 若 detail page 需要完整資訊但 summary card 只適合短文字，使用短版欄位，例如 `days[].summaryLodging`。
+- 若每日 `行程` 沒有可靠時間但包含多個景點，`days[].transport` 使用中文分號 `；` 分隔，讓 UI 一項一列呈現。
 
 新旅程 ID 建議使用：
 
@@ -153,20 +157,28 @@ assets/trips/<tour-id>/
 
 ## 自動切換最近旅程
 
-`index.html` 開啟後流程：
+第一次輸入 passcode 登入後流程：
 
 ```text
 讀取 trips.json
   ↓
-依照今天日期判斷旅程狀態
+顯示所有旅程主選單
+```
+
+已登入狀態重新開啟 / 重新整理 app：
+
+```text
+讀取 trips.json
   ↓
-如果今天在某個 trip 日期內，直接進入該 trip
+若有固定旅程，進入固定旅程
+  ↓
+若無固定旅程，依照今天日期判斷旅程狀態
+  ↓
+如果今天在某個 trip 日期內，進入該 trip
   ↓
 如果沒有進行中的 trip，進入最近即將開始的 trip
   ↓
 如果沒有未來 trip，進入最近結束的 trip
-  ↓
-使用者可按「所有旅程」回主選單
 ```
 
 排序規則：
@@ -181,6 +193,8 @@ assets/trips/<tour-id>/
 - `目前旅程`：回到自動判斷的最近旅程。
 - `固定此旅程`：讓使用者暫時固定目前旅程。
 - `取消固定`：回到自動判斷邏輯。
+
+首次登入永遠先顯示主選單，讓使用者知道目前有哪些旅程；回訪才使用固定 / 最近旅程快速進入。
 
 ## UI 與風格
 

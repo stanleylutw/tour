@@ -1,0 +1,211 @@
+{
+  "id": "2026-busan",
+  "title": "2026 暑假我們在釜山",
+  "subtitle": "Taipei to Busan family summer trip",
+  "destination": "Busan, Korea",
+  "startDate": "2026-07-18",
+  "endDate": "2026-07-22",
+  "people": 3,
+  "peopleNote": "1 成人 + 2 位小孩佔床",
+  "groups": [
+    {
+      "label": "同行旅客",
+      "count": 3,
+      "note": "1 成人 + 2 位小孩佔床，成員名單待補"
+    }
+  ],
+  "banner": "assets/trips/2026-busan/images/banner.png",
+  "logo": "",
+  "theme": {
+    "primary": "#0B3D91",
+    "accent": "#D62828",
+    "sun": "#FBBF24",
+    "sky": "#38BDF8"
+  },
+  "quickFacts": [
+    {
+      "label": "總天數",
+      "value": "5 天"
+    },
+    {
+      "label": "人數",
+      "value": "3 人"
+    },
+    {
+      "label": "主軸",
+      "value": "釜山暑假親子團體旅行"
+    },
+    {
+      "label": "費用",
+      "value": "團費 NT$98,700"
+    },
+    {
+      "label": "旅行社",
+      "value": "喜鴻假期"
+    }
+  ],
+  "bookings": [
+    {
+      "type": "package",
+      "title": "喜鴻假期釜山 5 日團體旅遊",
+      "status": "行程資料已提供",
+      "summary": "不進人蔘保肝．星遊釜山 5 日；五星汗蒸幕、遊艇煙火秀、LUGE 滑車、樂天、烤貝吃到飽。",
+      "price": "成人 NT$32,900；小孩佔床 NT$32,900；1 成人 + 2 小孩佔床合計 NT$98,700",
+      "source": "assets/trips/2026-busan/attachments/raw/PUS05JX260718RA.docx"
+    },
+    {
+      "type": "flight",
+      "title": "星宇航空 TPE-PUS 來回航班",
+      "status": "已列入旅行社行程",
+      "summary": "2026-07-18 JX902 TPE 14:45 -> PUS 17:55；2026-07-22 JX901 PUS 12:30 -> TPE 13:45",
+      "price": "團費內含",
+      "source": "assets/trips/2026-busan/attachments/raw/PUS05JX260718RA.docx"
+    },
+    {
+      "type": "hotel",
+      "title": "釜山住宿",
+      "status": "待確認",
+      "summary": "旅行社文件列出多間同級候選飯店，正式入住飯店待行前通知。",
+      "price": "團費內含",
+      "source": "assets/trips/2026-busan/attachments/raw/PUS05JX260718RA.docx"
+    },
+    {
+      "type": "package",
+      "title": "團費與訂金參考",
+      "status": "待確認付款",
+      "summary": "成人 NT$32,900；小孩佔床 NT$32,900；小孩不佔床 NT$31,900；單人房加價 NT$8,000；嬰兒 NT$6,000；簽證自理；稅金內含。",
+      "price": "1 成人 + 2 小孩佔床合計 NT$98,700；訂金 NT$15,000 x 3 = NT$45,000",
+      "source": "assets/trips/2026-busan/attachments/raw/PUS05JX260718RA.docx"
+    },
+    {
+      "type": "package",
+      "title": "喜鴻旅行社聯絡資訊",
+      "status": "資料已提供",
+      "summary": "業務劉亮吟 0935-430182；TEL 02-2511-8855 分機 5201；FAX 02-2536-2692；Email lilianliu@besttour.com.tw；台北市松江路148號8樓之1。",
+      "price": "旅行社聯絡資料",
+      "source": "assets/trips/2026-busan/attachments/raw/PUS05JX260718RA.docx"
+    }
+  ],
+  "pendingItems": [
+    "確認正式報名 / 付款狀態與訂單編號。",
+    "補齊 3 位旅客姓名與成員資料。",
+    "確認正式住宿飯店與地址，並建立住宿 GPS 連結。",
+    "確認護照效期：返國日 2026-07-22 起算需有 6 個月以上效期。",
+    "出發前 72 小時內完成韓國 e-ArrivalCard 電子入境申報。",
+    "韓國飯店響應環保，需自備牙刷、牙膏、拖鞋、香皂、洗髮精、毛巾與個人藥品。",
+    "若有特殊餐食，最少出發前三天（不含假日）告知業務。",
+    "確認旅行社行前說明會資料是否有調整航班、飯店或每日順序。",
+    "確認領隊、導遊、司機小費：每人每日 NT$300 x 5 天，3 人合計 NT$4,500。",
+    "注意團體機位由航空公司安排，旅行社與領隊無法保證指定座位。",
+    "注意韓國機場可能嚴格檢查行李超重，超重費用需自行支付。"
+  ],
+  "days": [
+    {
+      "id": "day-01",
+      "day": 1,
+      "date": "2026-07-18",
+      "weekday": "六",
+      "city": "桃園 -> 釜山",
+      "icon": "flight",
+      "status": "部分確認",
+      "transport": "JX902 TPE 14:45 -> PUS 17:55",
+      "schedule": [
+        {
+          "time": "14:45",
+          "title": "JX902 TPE -> PUS",
+          "note": "桃園 -> 釜山，17:55 抵達"
+        }
+      ],
+      "lodging": "釜山住宿待確認：NOTTE LA MIA HOTEL BUSAN / TRT HOTEL / Busan Station City Hotel / The Western Busan Hotel By STAYNEO / Busan Connect Ocean Hotel / NOMAD HOTEL 或同級",
+      "summaryLodging": "釜山住宿待確認",
+      "highlights": "桃園出發前往釜山，抵達後途經廣安大橋；晚餐安排釜山豬肉湯飯 + 小菜。",
+      "cost": "團費 NT$98,700；訂金參考 NT$45,000；早餐 X，午餐機上餐食，晚餐團費內含",
+      "sources": [
+        "assets/trips/2026-busan/attachments/raw/PUS05JX260718RA.docx"
+      ],
+      "calendarIcon": "airplane"
+    },
+    {
+      "id": "day-02",
+      "day": 2,
+      "date": "2026-07-19",
+      "weekday": "日",
+      "city": "釜山",
+      "icon": "map-pin",
+      "status": "部分確認",
+      "transport": "海東龍宮寺；機張傳統市場；BLUE LINE PARK 天空膠囊列車（4 人 1 台）；韓版灌籃高手平交道；豪華遊艇夜景與煙火秀約 60 分鐘",
+      "schedule": [],
+      "lodging": "釜山住宿待確認：NOTTE LA MIA HOTEL BUSAN / TRT HOTEL / Den Basta hotel SONG DO / Busan Station City Hotel / The Western Busan Hotel By STAYNEO / Busan Connect Ocean Hotel 或同級",
+      "summaryLodging": "釜山住宿待確認",
+      "highlights": "海邊寺廟、天空膠囊列車與夜間遊艇煙火秀；遊艇含無酒精飲料與餅乾。",
+      "cost": "團費內含；早餐飯店內用，午餐安東式燉雞 + 泡菜，晚餐韓式漢方人蔘雞",
+      "sources": [
+        "assets/trips/2026-busan/attachments/raw/PUS05JX260718RA.docx"
+      ],
+      "calendarIcon": "train"
+    },
+    {
+      "id": "day-03",
+      "day": 3,
+      "date": "2026-07-20",
+      "weekday": "一",
+      "city": "釜山",
+      "icon": "ticket",
+      "status": "部分確認",
+      "transport": "Skyline Luge 滑車 + 景觀纜車（兩次體驗券）；釜山樂天世界樂園（門票 + 自由券）；CLUB D OASIS 五星汗蒸幕",
+      "schedule": [],
+      "lodging": "釜山住宿待確認：NOTTE LA MIA HOTEL BUSAN / TRT HOTEL / Den Basta hotel SONG DO / Busan Connect Ocean Hotel / H Avenue Sasang Station Residence / Layers Hotel Busan 或同級",
+      "summaryLodging": "釜山住宿待確認",
+      "highlights": "滑車、樂天世界與汗蒸幕，親子遊玩日；午餐需自理。",
+      "cost": "團費內含；早餐飯店內用，午餐自理，晚餐貝殼倉庫烤貝與韓式烤肉吃到飽",
+      "sources": [
+        "assets/trips/2026-busan/attachments/raw/PUS05JX260718RA.docx"
+      ],
+      "calendarIcon": "beach"
+    },
+    {
+      "id": "day-04",
+      "day": 4,
+      "date": "2026-07-21",
+      "weekday": "二",
+      "city": "釜山",
+      "icon": "map-pin",
+      "status": "部分確認",
+      "transport": "甘川洞文化村；韓國彩妝保養品名店；海苔飯捲 DIY；海苔博物館；韓服體驗；南浦洞國際市場；光復洞時裝街與 BIFF 國際電影廣場",
+      "schedule": [],
+      "lodging": "釜山住宿待確認：NOTTE LA MIA HOTEL BUSAN / TRT HOTEL / Den Basta hotel SONG DO / Elmomento Sasang Residence / Busan Connect Ocean Hotel / Layers Hotel Busan 或同級",
+      "summaryLodging": "釜山住宿待確認",
+      "highlights": "文化村、韓國文化體驗與南浦洞市區散步；安排韓服體驗與海苔飯捲 DIY。",
+      "cost": "團費內含；早餐飯店內用，午餐韓式部隊鍋，晚餐厚切五花肉直火燒烤吃到飽",
+      "sources": [
+        "assets/trips/2026-busan/attachments/raw/PUS05JX260718RA.docx"
+      ],
+      "calendarIcon": "walk"
+    },
+    {
+      "id": "day-05",
+      "day": 5,
+      "date": "2026-07-22",
+      "weekday": "三",
+      "city": "釜山 -> 桃園",
+      "icon": "flight",
+      "status": "部分確認",
+      "transport": "松島海上散步路；松島天空步道；JX901 PUS 12:30 -> TPE 13:45",
+      "schedule": [
+        {
+          "time": "12:30",
+          "title": "JX901 PUS -> TPE",
+          "note": "釜山 -> 桃園，13:45 抵達"
+        }
+      ],
+      "lodging": "返台",
+      "summaryLodging": "返台",
+      "highlights": "松島海上散步路與松島天空步道後，搭機返回桃園。",
+      "cost": "團費內含；早餐飯店內用，午餐機上簡餐，晚餐無安排",
+      "sources": [
+        "assets/trips/2026-busan/attachments/raw/PUS05JX260718RA.docx"
+      ],
+      "calendarIcon": "airplane"
+    }
+  ]
+}

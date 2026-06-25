@@ -1,6 +1,6 @@
-# New Itinerary Creation Workflow v1.1
+# New Itinerary Creation Workflow v1.2
 
-Last updated: 2026-06-25 00:00:00 [Codex]
+Last updated: 2026-06-25 23:25:00 [Codex]
 
 ## Purpose
 
@@ -10,6 +10,7 @@ This document defines how Codex should create a new itinerary in the Family Trip
 
 | Version | Date Time | Summary | Who |
 |---|---|---|---|
+| v1.2 | 2026-06-25 23:25:00 | Add first-login, attachment extraction, summary lodging, and detail formatting rules | Codex |
 | v1.1 | 2026-06-25 00:00:00 | Add daily schedule field rules | Codex |
 | v1.0 | 2026-06-24 23:55:00 | Create new itinerary workflow | Codex |
 
@@ -197,6 +198,25 @@ If the user provides screenshots, PDFs, or pasted text, save them under:
 assets/trips/<tour-id>/attachments/
 ```
 
+If the user provides DOCX, PDF, image screenshots, or other booking / tour files, Codex should deeply scan the attachment and extract all HTML-useful itinerary information before or while creating the tour:
+
+- trip dates and destination
+- flight / train / transport numbers, cities, times, and terminals when available
+- daily activities and reliable activity times
+- lodging names, candidate hotels, addresses, check-in / check-out details
+- meal plans and included / self-paid meals
+- package price, deposit, taxes, visa notes, child pricing, and add-on fees
+- travel agency / booking contact information
+- entry requirements, passport reminders, luggage rules, tip reminders, and other checklist items
+
+Save the original source file under the tour folder, usually:
+
+```text
+assets/trips/<tour-id>/attachments/raw/
+```
+
+Use the extracted information in `bookings`, `pendingItems`, `days[]`, and `sources`; do not leave useful attachment details only in notes when they can be shown in the HTML.
+
 ### Step 6: Known Lodging
 
 Ask:
@@ -221,6 +241,8 @@ If lodging, hotel, or stay-house information is added:
 - If the app uses a known-location mapping, add the hotel / stay-house name and Google Maps query to that mapping.
 - Prefer a full address when available; otherwise use the hotel or stay-house name plus city.
 - If the address is incomplete, add a pending item: `補齊住宿 GPS 地址`。
+- If lodging detail is long, such as a candidate hotel list, keep the full text in `days[].lodging` for the detail page and add a short `days[].summaryLodging` for the month summary card.
+- Month summary cards should use `summaryLodging` when present, so the summary stays compact, for example `釜山住宿待確認`.
 
 ### Step 7: Tickets, Activities, and Reservations
 
@@ -240,6 +262,16 @@ Use known items to create:
 - day `schedule` when the activity has a reliable time
 - day `sources`
 - `pendingItems`
+
+When a day has multiple tour stops but no reliable individual times, put the stops in `days[].transport` separated by Chinese semicolons `；`.
+
+Example:
+
+```text
+海東龍宮寺；機張傳統市場；BLUE LINE PARK 天空膠囊列車；豪華遊艇夜景與煙火秀
+```
+
+The detail page uses this fallback to show one tour stop per line in the `行程` section.
 
 ### Step 8: Assets
 
@@ -300,6 +332,8 @@ data/trips.json
 
 Do not edit `index.html`, `styles.css`, or `script.js` unless the shared template needs a reusable feature for all tours.
 
+If shared behavior changes are required, update the cache query version in `index.html` for the changed asset, such as `script.js?v=...` or `styles.css?v=...`, so mobile Safari and PWA users do not keep seeing old behavior.
+
 ## JSON Draft Rules
 
 The new itinerary JSON should follow `data/trips/_template.json`.
@@ -313,6 +347,8 @@ Use the following conventions:
 - Missing cost: `待確認`
 - Missing booking source: leave `sources` empty until an attachment exists
 - Missing activity: add it to `pendingItems`
+- Long lodging text: put full text in `lodging` and short summary in `summaryLodging`
+- Multiple untimed tour stops: separate `transport` items with `；` so each item renders as a separate line
 
 Every new tour should have at least one draft day.
 
@@ -332,11 +368,23 @@ If the trip dates are unknown, generate only one draft day:
   "transport": "待確認",
   "schedule": [],
   "lodging": "待確認",
+  "summaryLodging": "待確認",
   "highlights": "待規劃",
   "cost": "待確認",
   "sources": []
 }
 ```
+
+## Login Default Rule
+
+When the user enters the passcode successfully in a fresh login flow, the app should open the main menu / all trips page first.
+
+When the user is already authenticated and reopens or refreshes the app, the app may keep the existing convenience behavior:
+
+1. Open the pinned trip if one exists.
+2. Otherwise open the nearest / active trip.
+
+This keeps first-time discovery clear while preserving quick return behavior.
 
 ## `data/trips.json` Entry Rules
 

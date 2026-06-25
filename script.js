@@ -84,7 +84,7 @@ function bindLogin() {
     if (input.value.trim() === PASSCODE) {
       localStorage.setItem(AUTH_KEY, "ok");
       error.textContent = "";
-      await enterApp();
+      await enterApp({ showPortalFirst: true });
     } else {
       error.textContent = "Passcode 不正確。提示：第一版預設為 2026。";
     }
@@ -160,12 +160,16 @@ function closeAttachmentPreview() {
   document.body.classList.remove("modal-open");
 }
 
-async function enterApp() {
+async function enterApp(options = {}) {
   document.querySelector("#login-screen").classList.add("hidden");
   document.querySelector("#main-app").classList.remove("hidden");
   state.trips = await loadTrips();
   state.nearestTripId = chooseNearestTrip(state.trips)?.id;
   const pinnedTrip = localStorage.getItem(PINNED_TRIP_KEY);
+  if (options.showPortalFirst) {
+    showPortal();
+    return;
+  }
   await showTrip(pinnedTrip || state.nearestTripId);
 }
 
@@ -549,10 +553,11 @@ function monthDaySummaryTemplate(day) {
 }
 
 function monthDaySummaryDetails(day) {
+  const summaryLodging = day.summaryLodging || day.lodging;
   const lines = [
     day.highlights,
     monthSummaryScheduleText(day),
-    day.lodging ? `住宿：${day.lodging}` : "",
+    summaryLodging ? `住宿：${summaryLodging}` : "",
     day.cost ? `費用：${day.cost}` : ""
   ].filter(Boolean);
   while (lines.length < 4) lines.push("查看當日完整行程");
